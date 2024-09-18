@@ -42,9 +42,6 @@ public class Drive extends OpMode {
     boolean D = true;
 
 
-    int p = -25;
-
-
     @Override
     public void loop() {
 
