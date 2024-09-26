@@ -44,6 +44,7 @@ public class HardwareSoftware {
         BRdrive.setDirection(DcMotorEx.Direction.REVERSE);
 
         // should DcMotor be DcMotorEx?
+        // yes it should be, velocity becomes avlailable
 
         FLdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BRdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
