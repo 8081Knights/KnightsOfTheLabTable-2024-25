@@ -13,6 +13,16 @@ public class HardwareSoftware {
 
     private HardwareMap hw = null;
 
+    /*
+    Hey, this is sam, I have a couple things to comment here
+
+    could you take the DcMotorEx public and remove the &&drive() methods at the end
+    You then don't need to address the motors as motor().something(),
+    rather just motor.something() when you write your code.
+
+    It'll also make the retrieval of encoders and setting of power much faster compared to the
+    way it works now.
+     */
 
 
     DcMotorEx FRdrive    = null;
