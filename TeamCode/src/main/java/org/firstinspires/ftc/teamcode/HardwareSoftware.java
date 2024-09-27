@@ -24,6 +24,7 @@ public class HardwareSoftware {
     way it works now.
      */
 
+//yo it's Luke, if you want unneeded changes make them yourself, and changing how we call the motors won't make retrieving info from encoders much faster
 
     DcMotorEx FRdrive    = null;
     DcMotorEx BRdrive     = null;
@@ -56,10 +57,10 @@ public class HardwareSoftware {
         // should DcMotor be DcMotorEx?
         // yes it should be, velocity becomes avlailable
 
-        FLdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BRdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FRdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BLdrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FLdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BRdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FRdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BLdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         gyro = AHRS.getInstance(hw.get(NavxMicroNavigationSensor.class, "gyro"),
                 AHRS.DeviceDataType.kProcessedData);
