@@ -14,26 +14,16 @@ public class HardwareSoftware {
 
     private HardwareMap hw = null;
 
-    /*
-    Hey, this is sam, I have a couple things to comment here
 
-    could you take the DcMotorEx public and remove the &&drive() methods at the end
-    You then don't need to address the motors as motor().something(),
-    rather just motor.something() when you write your code.
 
-    It'll also make the retrieval of encoders and setting of power much faster compared to the
-    way it works now.
-     */
 
-//yo it's Luke, if you want unneeded changes make them yourself, and changing how we call the motors won't make retrieving info from encoders much faster
+    public DcMotorEx FRdrive    = null;
+    public DcMotorEx BRdrive     = null;
+    public DcMotorEx BLdrive      = null;
+    public DcMotorEx FLdrive     = null;
 
-    DcMotorEx FRdrive    = null;
-    DcMotorEx BRdrive     = null;
-    DcMotorEx BLdrive      = null;
-    DcMotorEx FLdrive     = null;
-
-    DcMotorEx Linear1   = null;
-    DcMotorEx Linear2   = null;
+    public DcMotorEx Linear1   = null;
+    public DcMotorEx Linear2   = null;
 
     SparkFunOTOS gyro;
 
