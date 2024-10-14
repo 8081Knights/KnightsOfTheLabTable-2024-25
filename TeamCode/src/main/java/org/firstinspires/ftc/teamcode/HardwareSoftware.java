@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -31,7 +32,10 @@ public class HardwareSoftware {
     DcMotorEx BLdrive      = null;
     DcMotorEx FLdrive     = null;
 
-    AHRS gyro = null;
+    DcMotorEx Linear1   = null;
+    DcMotorEx Linear2   = null;
+
+    SparkFunOTOS gyro;
 
 
     public void init(HardwareMap ahw){
@@ -54,6 +58,9 @@ public class HardwareSoftware {
         BLdrive.setDirection(DcMotorEx.Direction.FORWARD);
         BRdrive.setDirection(DcMotorEx.Direction.REVERSE);
 
+        Linear1 = hw.get(DcMotorEx.class, "Linear1");
+        Linear2 = hw.get(DcMotorEx.class, "Linear2");
+
         // should DcMotor be DcMotorEx?
         // yes it should be, velocity becomes avlailable
 
@@ -62,9 +69,10 @@ public class HardwareSoftware {
         FRdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BLdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        gyro = AHRS.getInstance(hw.get(NavxMicroNavigationSensor.class, "gyro"),
-                AHRS.DeviceDataType.kProcessedData);
+        gyro = hw.get(SparkFunOTOS.class, "gyro");
 
+        Linear1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Linear2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -84,7 +92,15 @@ public class HardwareSoftware {
         return BRdrive;
     }
 
-    public AHRS gyro(){return gyro;}
+    public DcMotorEx Linear1(){
+        return Linear1;
+    }
+
+    public DcMotorEx Linear2(){
+        return Linear2;
+    }
+
+    public SparkFunOTOS gyro(){return gyro;}
 
 }
 

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -22,19 +23,6 @@ public class Drive extends OpMode {
         hw.init(hardwareMap);
 
 
-        if (hw.gyro().isCalibrating()){
-            telemetry.addLine("Gyro is calibrating.");
-            telemetry.update();
-        }
-        if (!hw.gyro().isCalibrating()){
-            telemetry.addLine("Gyro is finished calibrating.");
-            telemetry.update();
-        }
-
-
-
-
-
 
     }
 
@@ -50,8 +38,9 @@ public class Drive extends OpMode {
         double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
+        SparkFunOTOS.Pose2D pos = hw.gyro().getPosition();
 
-        double botHeading = -Math.toRadians(hw.gyro().getYaw());
+        double botHeading = -Math.toRadians(pos.h);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -66,7 +55,18 @@ public class Drive extends OpMode {
         hw.FRdrive().setPower(((rotY + rotX - rx) / denominator) * DS);
         hw.BRdrive().setPower(((rotY - rotX - rx) / denominator) * DS);
 
-
+        if(gamepad2.right_trigger > .1) {
+            hw.Linear1().setPower(gamepad2.right_trigger);
+            hw.Linear2().setPower(gamepad2.right_trigger);
+        }
+        else if (gamepad2.left_trigger > .1) {
+            hw.Linear1().setPower(-gamepad2.left_trigger);
+            hw.Linear2().setPower(-gamepad2.left_trigger);
+        }
+        else{
+            hw.Linear1().setPower(0);
+            hw.Linear2().setPower(0);
+        }
         if (gamepad1.right_bumper && D == true) {
             DS = .2;
             D = false;
@@ -76,6 +76,8 @@ public class Drive extends OpMode {
             DS = 1;
             D = true;
         }
+
+
 // add reset in case headless needs to be reset
     }
 
