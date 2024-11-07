@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.kauailabs.navx.ftc.AHRS;
-import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -22,8 +19,16 @@ public class HardwareSoftware {
     public DcMotorEx BLdrive      = null;
     public DcMotorEx FLdrive     = null;
 
-    public DcMotorEx Linear1   = null;
-    public DcMotorEx Linear2   = null;
+    public DcMotor Intake    = null;
+
+    public DcMotorEx InLinear    = null;
+
+
+    public DcMotorEx Linear   = null;
+    public DcMotorEx Rinear   = null;
+
+    public Servo Lucket     = null;
+    public Servo Rucket     = null;
 
     SparkFunOTOS gyro;
 
@@ -38,18 +43,36 @@ public class HardwareSoftware {
         BLdrive = hw.get(DcMotorEx.class, "BLdrive");
         BRdrive = hw.get(DcMotorEx.class, "BRdrive");
 
+        InLinear = hw.get(DcMotorEx.class, "InLinear");
+
+        Intake = hw.get(DcMotor.class, "Intake");
+
+        Linear = hw.get(DcMotorEx.class, "Linear");
+        Rinear = hw.get(DcMotorEx.class, "Rinear");
+
+        Lucket = hw.get(Servo.class, "Lucket");
+        Rucket = hw.get(Servo.class, "Rucket");
+
         FLdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         BRdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         FRdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         BLdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        Linear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Rinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Linear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Rinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        InLinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        InLinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
 
         FLdrive.setDirection(DcMotorEx.Direction.REVERSE);
         FRdrive.setDirection(DcMotorEx.Direction.FORWARD);
         BLdrive.setDirection(DcMotorEx.Direction.FORWARD);
         BRdrive.setDirection(DcMotorEx.Direction.REVERSE);
 
-        Linear1 = hw.get(DcMotorEx.class, "Linear1");
-        Linear2 = hw.get(DcMotorEx.class, "Linear2");
+        Linear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // should DcMotor be DcMotorEx?
         // yes it should be, velocity becomes avlailable
@@ -61,8 +84,12 @@ public class HardwareSoftware {
 
         gyro = hw.get(SparkFunOTOS.class, "gyro");
 
-        Linear1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Linear2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Linear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Rinear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        InLinear.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Lucket.setDirection(Servo.Direction.REVERSE);
 
     }
 
@@ -82,12 +109,28 @@ public class HardwareSoftware {
         return BRdrive;
     }
 
-    public DcMotorEx Linear1(){
-        return Linear1;
+    public DcMotor Intake(){
+        return Intake;
     }
 
-    public DcMotorEx Linear2(){
-        return Linear2;
+    public DcMotorEx Linear(){
+        return Linear;
+    }
+
+    public DcMotorEx Rinear(){
+        return Rinear;
+    }
+
+    public DcMotorEx InLinear(){
+        return InLinear;
+    }
+
+    public Servo Lucket(){
+        return Lucket;
+    }
+
+    public Servo Rucket(){
+        return Rucket;
     }
 
     public SparkFunOTOS gyro(){return gyro;}

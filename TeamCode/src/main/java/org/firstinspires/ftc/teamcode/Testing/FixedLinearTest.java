@@ -13,23 +13,23 @@ public class FixedLinearTest extends OpMode {
     double[] pidValues = {.1, 0, 0};
     int[] encoderValues = {0, 0};
 
-    DcMotorEx Linear1;
-    DcMotorEx Linear2;
+    DcMotorEx Linear;
+    DcMotorEx Rinear;
 
 
 
 
     @Override
     public void init() {
-        Linear1 = hardwareMap.get(DcMotorEx.class, "Linear1");
-        Linear2 = hardwareMap.get(DcMotorEx.class, "Linear2");
+        Linear = hardwareMap.get(DcMotorEx.class, "Linear");
+        Rinear = hardwareMap.get(DcMotorEx.class, "Rinear");
 
-        Linear1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        Linear2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        Linear1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Linear2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Linear1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Linear2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Rinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Rinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Rinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
 
@@ -38,11 +38,11 @@ public class FixedLinearTest extends OpMode {
     @Override
     public void loop() {
         // add telemetry to record the encoder values as we see how far they go.
-        encoderValues[0] = Linear1.getCurrentPosition();
-        encoderValues[1] = Linear2.getCurrentPosition();
+        encoderValues[0] = Linear.getCurrentPosition();
+        encoderValues[1] = Rinear.getCurrentPosition();
 
-        telemetry.addData("Encoder Values Linear1", Linear1.getCurrentPosition());
-        telemetry.addData("Encoder Values Linear2", Linear2.getCurrentPosition());
+        telemetry.addData("Encoder Values Linear", Linear.getCurrentPosition());
+        telemetry.addData("Encoder Values Rinear", Rinear.getCurrentPosition());
 
         telemetry.update();
 

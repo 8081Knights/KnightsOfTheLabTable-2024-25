@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.util.Encoder;
@@ -37,6 +38,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double X_MULTIPLIER = 0.00047949702; // Multiplier in the X direction
     public static double Y_MULTIPLIER = 1; // Multiplier in the Y direction
 
+    SparkFunOTOS gyro;
+
     private Encoder FLdrive, FRdrive, BRdrive;
 
     private List<Integer> lastEncPositions, lastEncVels;
@@ -54,6 +57,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         FLdrive = new Encoder(hardwareMap.get(DcMotorEx.class, "FLdrive"));
         FRdrive = new Encoder(hardwareMap.get(DcMotorEx.class, "FRdrive"));
         BRdrive = new Encoder(hardwareMap.get(DcMotorEx.class, "BRdrive"));
+
+        gyro = hardwareMap.get(SparkFunOTOS.class, "gyro");
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
     }
