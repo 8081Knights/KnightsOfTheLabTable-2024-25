@@ -102,13 +102,15 @@ public class Drive extends OpMode {
             hw.Intake().setPower(0);
         }
 
-        if (gamepad2.y) {
-            hw.Lucket().setPosition(0);
-            hw.Rucket().setPosition(.5);
+        if (gamepad2.y)  //up
+        {
+            hw.Lucket().setPosition(1);  //originally 0
+            hw.Rucket().setPosition(-.75);  //originally .5
         }
-        else if (gamepad2.b) {
-            hw.Lucket().setPosition(1);
-            hw.Rucket().setPosition(-1);
+        else if (gamepad2.b) //down
+        {
+            hw.Lucket().setPosition(0);   //originally 1
+            hw.Rucket().setPosition(.25); //originally -1
         }
 
 
