@@ -18,16 +18,16 @@ public class Drive extends OpMode {
     HardwareSoftware hw = new HardwareSoftware();
     @Override
     public void init() {
-
-
         hw.init(hardwareMap);
 
         hw.gyro().calibrateImu();
         hw.gyro().resetTracking();
 
 
-
-
+        /*
+        This code is being refactored according to the sheet for the controller
+        (Old is dark green, new is light)
+         */
     }
 
     double DS = 1;
@@ -36,7 +36,6 @@ public class Drive extends OpMode {
 
     @Override
     public void loop() {
-
 
         double y = -gamepad1.left_stick_y; // Remember, Y stick is reversed!
         double x = gamepad1.left_stick_x;
