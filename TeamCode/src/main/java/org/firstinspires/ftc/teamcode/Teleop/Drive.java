@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Teleop;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 import org.firstinspires.ftc.teamcode.HardwareSoftware;
@@ -28,10 +29,25 @@ public class Drive extends OpMode {
         This code is being refactored according to the sheet for the controller
         (Old is dark green, new is light)
          */
+        currentSetPosition = positions[0];
+
+        hw.Rinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.Linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.Rinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hw.Linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     double DS = 1;
     boolean D = true;
+
+    // FixedLinear Vars
+    double[] pidValues = {2, 0, 0};
+    int[] encoderValues = {3286, 3264};
+    double height = 28.5d;
+    double[] positions = {0,13,28};
+    double currentSetPosition;
+    int[] positionsEncoderValues = {0,0};
 
 
     @Override
@@ -116,19 +132,33 @@ public class Drive extends OpMode {
 //        }
 
 
-        if (gamepad2.dpad_up)  //up
-        {
+        if (gamepad2.dpad_down) {
             hw.Lucket().setPosition(1);  //originally 0
             hw.Rucket().setPosition(-.75);  //originally .5
         }
-        else if (gamepad2.dpad_down) //down
-        {
+        else if (gamepad2.dpad_up) {
             hw.Lucket().setPosition(0);   //originally 1
             hw.Rucket().setPosition(.25); //originally -1
         }
 
 
-// add reset in case headless needs to be reset
+
+
+
+        // fixedLinear Logic
+        if (gamepad2.a) {
+            currentSetPosition = positions[0];
+        } else if (gamepad2.b) {
+            currentSetPosition = positions[1];
+        } else if (gamepad2.y) {
+            currentSetPosition = positions[2];
+        }
+
+        positionsEncoderValues[0] = (int) (currentSetPosition * (encoderValues[0] / height));
+        positionsEncoderValues[1] = (int) (currentSetPosition * (encoderValues[1] / height));
+        hw.Rinear.setPower(((double) (positionsEncoderValues[0] - hw.Rinear.getCurrentPosition()) / encoderValues[0] ) * pidValues[0]);
+        hw.Linear.setPower(((double) (positionsEncoderValues[1] - hw.Linear.getCurrentPosition()) / encoderValues[1] ) * pidValues[0]);
+
 
         telemetry.addData("bot heading", botHeading);
         telemetry.addData("Lucket", hw.Lucket().getPosition());

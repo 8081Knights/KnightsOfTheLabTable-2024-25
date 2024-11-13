@@ -18,8 +18,6 @@ public class LinearTest extends OpMode {
 
 
     HardwareSoftware hw = new HardwareSoftware();
-    DcMotorEx Linear   = null;
-    DcMotorEx Rinear   = null;
 
 
     @Override
@@ -27,11 +25,12 @@ public class LinearTest extends OpMode {
 
 
 
-        Linear = hardwareMap.get(DcMotorEx.class, "Linear");
-        Rinear = hardwareMap.get(DcMotorEx.class, "Rinear");
+        hw.init(hardwareMap);
 
-        Linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Rinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.Rinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.Linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.Rinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hw.Linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -41,16 +40,16 @@ public class LinearTest extends OpMode {
     public void loop() {
 
         if(gamepad2.right_trigger > .1) {
-            Linear.setPower(gamepad2.right_trigger);
-            Rinear.setPower(-gamepad2.right_trigger);
+            hw.Linear.setPower(gamepad2.right_trigger);
+            hw.Rinear.setPower(-gamepad2.right_trigger);
         }
         else if (gamepad2.left_trigger > .1) {
-            Linear.setPower(-gamepad2.left_trigger);
-            Rinear.setPower(gamepad2.left_trigger);
+            hw.Linear.setPower(-gamepad2.left_trigger);
+            hw.Rinear.setPower(gamepad2.left_trigger);
         }
         else{
-            Linear.setPower(0);
-            Rinear.setPower(0);
+            hw.Linear.setPower(0);
+            hw.Rinear.setPower(0);
         }
 
 

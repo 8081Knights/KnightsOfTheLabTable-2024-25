@@ -58,8 +58,7 @@ public class HardwareSoftware {
         FRdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         BLdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        Linear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        Rinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
         Linear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         Rinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
@@ -74,8 +73,6 @@ public class HardwareSoftware {
 
         Linear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // should DcMotor be DcMotorEx?
-        // yes it should be, velocity becomes avlailable
 
         FLdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BRdrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
