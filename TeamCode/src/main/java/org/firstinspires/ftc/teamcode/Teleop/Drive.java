@@ -58,18 +58,6 @@ public class Drive extends OpMode {
         hw.FRdrive().setPower(((rotY + rotX - rx) / denominator) * DS);
         hw.BRdrive().setPower(((rotY - rotX - rx) / denominator) * DS);
 
-        if(gamepad2.right_bumper) {
-            hw.Linear().setPower(1);
-            hw.Rinear().setPower(1);
-        }
-        else if (gamepad2.left_bumper) {
-            hw.Linear().setPower(-1);
-            hw.Rinear().setPower(-1);
-        }
-        else{
-            hw.Linear().setPower(0);
-            hw.Rinear().setPower(0);
-        }
 
         if (gamepad1.right_bumper && D == true) {
             DS = .2;
@@ -81,32 +69,59 @@ public class Drive extends OpMode {
             D = true;
         }
 
-        if(gamepad2.a) {
-            hw.InLinear().setPower(1);
+        // Gamepad #2
+        // Intake Linear Slide
+        if(gamepad2.left_trigger > .1) {
+            hw.InLinear.setPower(gamepad2.left_trigger);
         }
-        else if (gamepad2.x) {
-            hw.InLinear().setPower(-1);
-        }
-        else{
-            hw.InLinear().setPower(0);
-        }
-
-        if(gamepad2.right_trigger > .1) {
-            hw.Intake().setPower(gamepad2.right_trigger);
-        }
-        else if (gamepad2.left_trigger > .1) {
-            hw.Intake().setPower(-gamepad2.left_trigger);
-        }
-        else{
-            hw.Intake().setPower(0);
+        else if (gamepad2.right_trigger > .1) {
+            hw.InLinear.setPower(-gamepad2.right_trigger);
+        } else{
+            hw.InLinear.setPower(0);
         }
 
-        if (gamepad2.y)  //up
+
+
+//        if(gamepad2.right_trigger > .1) {
+//            hw.Intake().setPower(gamepad2.right_trigger);
+//        }
+//        else if (gamepad2.left_trigger > .1) {
+//            hw.Intake().setPower(-gamepad2.left_trigger);
+//        }
+//        else{
+//            hw.Intake().setPower(0);
+//        }
+
+
+
+        if (gamepad2.left_bumper) {
+            hw.Intake.setPower(-.8);
+        } else if (gamepad2.right_bumper) {
+            hw.Intake.setPower(.8);
+        } else {
+            hw.Intake.setPower(0);
+        }
+
+//        if(gamepad2.right_bumper) {
+//            hw.Linear().setPower(1);
+//            hw.Rinear().setPower(1);
+//        }
+//        else if (gamepad2.left_bumper) {
+//            hw.Linear().setPower(-1);
+//            hw.Rinear().setPower(-1);
+//        }
+//        else{
+//            hw.Linear().setPower(0);
+//            hw.Rinear().setPower(0);
+//        }
+
+
+        if (gamepad2.dpad_up)  //up
         {
             hw.Lucket().setPosition(1);  //originally 0
             hw.Rucket().setPosition(-.75);  //originally .5
         }
-        else if (gamepad2.b) //down
+        else if (gamepad2.dpad_down) //down
         {
             hw.Lucket().setPosition(0);   //originally 1
             hw.Rucket().setPosition(.25); //originally -1
