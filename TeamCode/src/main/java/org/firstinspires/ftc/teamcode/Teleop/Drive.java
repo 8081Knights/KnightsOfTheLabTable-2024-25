@@ -134,32 +134,32 @@ public class Drive extends OpMode {
 
         //no exact positions yet just getting something that works to not overheat motors
         if (gamepad2.a) {
-            hw.Linear().setTargetPosition(1000);
-            hw.Rinear().setTargetPosition(1000);
+            hw.Linear.setTargetPosition((int) (positions[0] * height / encoderValues[0]));
+            hw.Rinear.setTargetPosition((int) (positions[0] * height / encoderValues[1]));
 
-            hw.Linear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            hw.Linear().setPower(1);
-            hw.Rinear().setPower(1);
+            hw.Linear.setPower(1);
+            hw.Rinear.setPower(1);
         } else if (gamepad2.b) {
-            hw.Linear().setTargetPosition(2000);
-            hw.Rinear().setTargetPosition(2000);
+            hw.Linear.setTargetPosition((int) (positions[1] * height / encoderValues[0]));
+            hw.Rinear.setTargetPosition((int) (positions[1] * height / encoderValues[1]));
 
-            hw.Linear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            hw.Linear().setPower(1);
-            hw.Rinear().setPower(1);
+            hw.Linear.setPower(1);
+            hw.Rinear.setPower(1);
         } else if (gamepad2.y) {
-            hw.Linear().setTargetPosition(3000);
-            hw.Rinear().setTargetPosition(3000);
+            hw.Linear.setTargetPosition((int) (positions[2] * height / encoderValues[0]));
+            hw.Rinear.setTargetPosition((int) (positions[2] * height / encoderValues[1]));
 
-            hw.Linear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            hw.Linear().setPower(1);
-            hw.Rinear().setPower(1);
+            hw.Linear.setPower(1);
+            hw.Rinear.setPower(1);
         }
 
 
