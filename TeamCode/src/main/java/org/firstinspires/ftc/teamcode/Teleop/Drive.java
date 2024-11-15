@@ -98,15 +98,15 @@ public class Drive extends OpMode {
 
 
 
-//        if(gamepad2.right_trigger > .1) {
-//            hw.Intake().setPower(gamepad2.right_trigger);
-//        }
-//        else if (gamepad2.left_trigger > .1) {
-//            hw.Intake().setPower(-gamepad2.left_trigger);
-//        }
-//        else{
-//            hw.Intake().setPower(0);
-//        }
+        if(gamepad2.right_trigger > .1) {
+            hw.Intake().setPower(gamepad2.right_trigger);
+        }
+        else if (gamepad2.left_trigger > .1) {
+            hw.Intake().setPower(-gamepad2.left_trigger);
+        }
+        else{
+            hw.Intake().setPower(0);
+        }
 
 
 
@@ -118,46 +118,67 @@ public class Drive extends OpMode {
             hw.Intake.setPower(0);
         }
 
-//        if(gamepad2.right_bumper) {
-//            hw.Linear().setPower(1);
-//            hw.Rinear().setPower(1);
-//        }
-//        else if (gamepad2.left_bumper) {
-//            hw.Linear().setPower(-1);
-//            hw.Rinear().setPower(-1);
-//        }
-//        else{
-//            hw.Linear().setPower(0);
-//            hw.Rinear().setPower(0);
-//        }
 
 
         if (gamepad2.dpad_down) {
-            hw.Lucket().setPosition(1);  //originally 0
+            
+            hw.Lucket().setPosition(.1);//originally 0
             hw.Rucket().setPosition(-.75);  //originally .5
         }
         else if (gamepad2.dpad_up) {
             hw.Lucket().setPosition(0);   //originally 1
+
             hw.Rucket().setPosition(.25); //originally -1
         }
 
 
+        //no exact positions yet just getting something that works to not overheat motors
+        if (gamepad2.a) {
+            hw.Linear().setTargetPosition(1000);
+            hw.Rinear().setTargetPosition(1000);
 
+            hw.Linear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            hw.Linear().setPower(1);
+            hw.Rinear().setPower(1);
+        } else if (gamepad2.b) {
+            hw.Linear().setTargetPosition(2000);
+            hw.Rinear().setTargetPosition(2000);
+
+            hw.Linear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            hw.Linear().setPower(1);
+            hw.Rinear().setPower(1);
+        } else if (gamepad2.y) {
+            hw.Linear().setTargetPosition(3000);
+            hw.Rinear().setTargetPosition(3000);
+
+            hw.Linear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            hw.Linear().setPower(1);
+            hw.Rinear().setPower(1);
+        }
 
 
         // fixedLinear Logic
-        if (gamepad2.a) {
-            currentSetPosition = positions[0];
-        } else if (gamepad2.b) {
-            currentSetPosition = positions[1];
-        } else if (gamepad2.y) {
-            currentSetPosition = positions[2];
-        }
+//        if (gamepad2.a) {
+//            currentSetPosition = positions[0];
+//        } else if (gamepad2.b) {
+//            currentSetPosition = positions[1];
+//        } else if (gamepad2.y) {
+//            currentSetPosition = positions[2];
+//        }
 
-        positionsEncoderValues[0] = (int) (currentSetPosition * (encoderValues[0] / height));
-        positionsEncoderValues[1] = (int) (currentSetPosition * (encoderValues[1] / height));
-        hw.Rinear.setPower(((double) (positionsEncoderValues[0] - hw.Rinear.getCurrentPosition()) / encoderValues[0] ) * pidValues[0]);
-        hw.Linear.setPower(((double) (positionsEncoderValues[1] - hw.Linear.getCurrentPosition()) / encoderValues[1] ) * pidValues[0]);
+
+        //why not just use run to position? over complicates the whole thing for no reason
+        // also has the motors overheating because they run constantly
+//        positionsEncoderValues[0] = (int) (currentSetPosition * (encoderValues[0] / height));
+//        positionsEncoderValues[1] = (int) (currentSetPosition * (encoderValues[1] / height));
+//        hw.Rinear.setPower(((double) (positionsEncoderValues[0] - hw.Rinear.getCurrentPosition()) / encoderValues[0] ) * pidValues[0]);
+//        hw.Linear.setPower(((double) (positionsEncoderValues[1] - hw.Linear.getCurrentPosition()) / encoderValues[1] ) * pidValues[0]);
 
 
         telemetry.addData("bot heading", botHeading);

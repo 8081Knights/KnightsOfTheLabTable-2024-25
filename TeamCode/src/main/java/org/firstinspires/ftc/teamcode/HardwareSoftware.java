@@ -59,8 +59,11 @@ public class HardwareSoftware {
         BLdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        Linear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Rinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Linear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Rinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        Linear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        Rinear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
         InLinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         InLinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
