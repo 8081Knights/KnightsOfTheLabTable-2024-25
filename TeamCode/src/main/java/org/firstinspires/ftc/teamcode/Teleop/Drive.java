@@ -45,7 +45,7 @@ public class Drive extends OpMode {
     double[] pidValues = {2, 0, 0};
     int[] encoderValues = {3286, 3264};
     double height = 28.5d;
-    double[] positions = {0,13,28};
+    double[] positions = {0,13,25};
     double currentSetPosition;
     int[] positionsEncoderValues = {0,0};
 
@@ -59,7 +59,7 @@ public class Drive extends OpMode {
 
         SparkFunOTOS.Pose2D pos = hw.gyro().getPosition();
 
-        double botHeading = -Math.toRadians(pos.h);
+        double botHeading = -Math.toRadians(pos.h) + Math.PI;
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
@@ -99,10 +99,10 @@ public class Drive extends OpMode {
 
 
         if(gamepad2.right_trigger > .1) {
-            hw.Intake().setPower(gamepad2.right_trigger);
+            hw.Intake().setPower(gamepad2.right_trigger * .7);
         }
         else if (gamepad2.left_trigger > .1) {
-            hw.Intake().setPower(-gamepad2.left_trigger);
+            hw.Intake().setPower(-gamepad2.left_trigger * .7);
         }
         else{
             hw.Intake().setPower(0);
