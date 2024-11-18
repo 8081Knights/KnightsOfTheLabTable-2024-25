@@ -49,6 +49,8 @@ public class Drive extends OpMode {
     double currentSetPosition;
     int[] positionsEncoderValues = {0,0};
 
+    boolean wasBumperPressed = false;  // Track previous bumper state
+
 
     @Override
     public void loop() {
@@ -75,38 +77,31 @@ public class Drive extends OpMode {
         hw.BRdrive().setPower(((rotY - rotX - rx) / denominator) * DS);
 
 
-        if (gamepad1.right_bumper && D == true) {
-            DS = .2;
-            D = false;
-        }
-
-        else if (gamepad1.right_bumper && D ==false){
-            DS = 1;
-            D = true;
+        if (gamepad1.right_bumper && !wasBumperPressed) {  // Check if bumper is pressed and was not previously pressed
+            if (D) {
+                DS = 0.2;
+                D = false;
+            } else {
+                DS = 1;
+                D = true;
+            }
+            wasBumperPressed = true;  // Set flag to indicate bumper was pressed
+        } else if (!gamepad1.right_bumper) {
+            wasBumperPressed = false;  // Reset flag when bumper is released
         }
 
         // Gamepad #2
         // Intake Linear Slide
-        if(gamepad2.left_trigger > .1) {
-            hw.InLinear.setPower(gamepad2.left_trigger);
+        if(gamepad1.left_trigger > .1) {
+            hw.InLinear.setPower(gamepad1.left_trigger);
         }
-        else if (gamepad2.right_trigger > .1) {
-            hw.InLinear.setPower(-gamepad2.right_trigger);
+        else if (gamepad1.right_trigger > .1) {
+            hw.InLinear.setPower(-gamepad1.right_trigger);
         } else{
             hw.InLinear.setPower(0);
         }
 
 
-
-        if(gamepad2.right_trigger > .1) {
-            hw.Intake().setPower(gamepad2.right_trigger * .7);
-        }
-        else if (gamepad2.left_trigger > .1) {
-            hw.Intake().setPower(-gamepad2.left_trigger * .7);
-        }
-        else{
-            hw.Intake().setPower(0);
-        }
 
 
 
@@ -120,22 +115,21 @@ public class Drive extends OpMode {
 
 
 
-        if (gamepad2.dpad_down) {
-            
-            hw.Lucket().setPosition(.1);//originally 0
-            hw.Rucket().setPosition(-.75);  //originally .5
+        if (gamepad2.dpad_down && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //bottom
+            hw.Lucket.setPosition(.72);   //originally .72
+            hw.Rucket.setPosition(.92); //originally .92
+
         }
-        else if (gamepad2.dpad_up) {
-            hw.Lucket().setPosition(0);   //originally 1
-
-            hw.Rucket().setPosition(.25); //originally -1
+        else if (gamepad2.dpad_up && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //top
+            hw.Lucket.setPosition(.15);//originally .1
+            hw.Rucket.setPosition(.35);  //originally .3
         }
 
-
-        //no exact positions yet just getting something that works to not overheat motors
+        //DO NOT CHANGE THIS WITHOUT A VERY GOOD REASON AND TALKING TO ME OR MRS. FIELD
+        //stop trying to use pid's you're making it confusing for no reason and comment my code out dont delete it dude
         if (gamepad2.a) {
-            hw.Linear.setTargetPosition((int) (positions[0] * height / encoderValues[0]));
-            hw.Rinear.setTargetPosition((int) (positions[0] * height / encoderValues[1]));
+            hw.Linear.setTargetPosition(50);
+            hw.Rinear.setTargetPosition(50);
 
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -143,8 +137,8 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.b) {
-            hw.Linear.setTargetPosition((int) (positions[1] * height / encoderValues[0]));
-            hw.Rinear.setTargetPosition((int) (positions[1] * height / encoderValues[1]));
+            hw.Linear.setTargetPosition(1250);
+            hw.Rinear.setTargetPosition(1250);
 
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -152,8 +146,8 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.y) {
-            hw.Linear.setTargetPosition((int) (positions[2] * height / encoderValues[0]));
-            hw.Rinear.setTargetPosition((int) (positions[2] * height / encoderValues[1]));
+            hw.Linear.setTargetPosition(3100);
+            hw.Rinear.setTargetPosition(3100);
 
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -163,27 +157,40 @@ public class Drive extends OpMode {
         }
 
 
-        // fixedLinear Logic
 //        if (gamepad2.a) {
-//            currentSetPosition = positions[0];
+//            hw.Linear.setTargetPosition((int) (positions[0] * height / encoderValues[0]));
+//            hw.Rinear.setTargetPosition((int) (positions[0] * height / encoderValues[1]));
+//
+//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            hw.Linear.setPower(1);
+//            hw.Rinear.setPower(1);
 //        } else if (gamepad2.b) {
-//            currentSetPosition = positions[1];
+//            hw.Linear.setTargetPosition((int) (positions[1] * height / encoderValues[0]));
+//            hw.Rinear.setTargetPosition((int) (positions[1] * height / encoderValues[1]));
+//
+//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            hw.Linear.setPower(1);
+//            hw.Rinear.setPower(1);
 //        } else if (gamepad2.y) {
-//            currentSetPosition = positions[2];
+//            hw.Linear.setTargetPosition((int) (positions[2] * height / encoderValues[0]));
+//            hw.Rinear.setTargetPosition((int) (positions[2] * height / encoderValues[1]));
+//
+//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            hw.Linear.setPower(1);
+//            hw.Rinear.setPower(1);
 //        }
 
 
-        //why not just use run to position? over complicates the whole thing for no reason
-        // also has the motors overheating because they run constantly
-//        positionsEncoderValues[0] = (int) (currentSetPosition * (encoderValues[0] / height));
-//        positionsEncoderValues[1] = (int) (currentSetPosition * (encoderValues[1] / height));
-//        hw.Rinear.setPower(((double) (positionsEncoderValues[0] - hw.Rinear.getCurrentPosition()) / encoderValues[0] ) * pidValues[0]);
-//        hw.Linear.setPower(((double) (positionsEncoderValues[1] - hw.Linear.getCurrentPosition()) / encoderValues[1] ) * pidValues[0]);
-
 
         telemetry.addData("bot heading", botHeading);
-        telemetry.addData("Lucket", hw.Lucket().getPosition());
-        telemetry.addData("Rucket", hw.Rucket().getPosition());
+        telemetry.addData("Lucket", hw.Lucket.getPosition());
+        telemetry.addData("Rucket", hw.Rucket.getPosition());
         telemetry.update();
     }
 

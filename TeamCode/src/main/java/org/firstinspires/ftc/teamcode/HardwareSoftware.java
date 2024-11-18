@@ -62,8 +62,8 @@ public class HardwareSoftware {
         Linear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         Rinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        Linear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        Rinear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//        Linear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//        Rinear.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
         InLinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         InLinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -125,13 +125,6 @@ public class HardwareSoftware {
         return InLinear;
     }
 
-    public Servo Lucket(){
-        return Lucket;
-    }
-
-    public Servo Rucket(){
-        return Rucket;
-    }
 
     public SparkFunOTOS gyro(){return gyro;}
 
