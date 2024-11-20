@@ -30,7 +30,7 @@ public class HardwareSoftware {
     public Servo Lucket     = null;
     public Servo Rucket     = null;
 
-    SparkFunOTOS gyro;
+    public SparkFunOTOS gyro;
 
 
     public void init(HardwareMap ahw){

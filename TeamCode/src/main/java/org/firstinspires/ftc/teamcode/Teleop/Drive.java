@@ -128,8 +128,8 @@ public class Drive extends OpMode {
         //DO NOT CHANGE THIS WITHOUT A VERY GOOD REASON AND TALKING TO ME OR MRS. FIELD
         //stop trying to use pid's you're making it confusing for no reason and comment my code out dont delete it dude
         if (gamepad2.a) {
-            hw.Linear.setTargetPosition(50);
-            hw.Rinear.setTargetPosition(50);
+            hw.Linear.setTargetPosition(25);
+            hw.Rinear.setTargetPosition(25);
 
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -146,8 +146,8 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.y) {
-            hw.Linear.setTargetPosition(3100);
-            hw.Rinear.setTargetPosition(3100);
+            hw.Linear.setTargetPosition(3200);
+            hw.Rinear.setTargetPosition(3200);
 
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
