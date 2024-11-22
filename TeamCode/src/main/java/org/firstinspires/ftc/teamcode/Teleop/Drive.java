@@ -116,13 +116,13 @@ public class Drive extends OpMode {
 
 
         if (gamepad2.dpad_down && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //bottom
-            hw.Lucket.setPosition(.72);   //originally .72
-            hw.Rucket.setPosition(.92); //originally .92
+            hw.Lucket.setPosition(1);
+            hw.Rucket.setPosition(1);
 
         }
         else if (gamepad2.dpad_up && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //top
-            hw.Lucket.setPosition(.15);//originally .1
-            hw.Rucket.setPosition(.35);  //originally .3
+            hw.Lucket.setPosition(0);
+            hw.Rucket.setPosition(0);
         }
 
         //DO NOT CHANGE THIS WITHOUT A VERY GOOD REASON AND TALKING TO ME OR MRS. FIELD
@@ -137,6 +137,9 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.b) {
+            hw.Lucket.setPosition(.15);
+            hw.Rucket.setPosition(.35);
+
             hw.Linear.setTargetPosition(1250);
             hw.Rinear.setTargetPosition(1250);
 
@@ -146,6 +149,9 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.y) {
+            hw.Lucket.setPosition(.15);
+            hw.Rucket.setPosition(.35);
+
             hw.Linear.setTargetPosition(3200);
             hw.Rinear.setTargetPosition(3200);
 
@@ -185,6 +191,10 @@ public class Drive extends OpMode {
 //            hw.Linear.setPower(1);
 //            hw.Rinear.setPower(1);
 //        }
+
+        if (gamepad1.y && gamepad1.b){
+            hw.gyro().resetTracking();
+        }
 
 
 
