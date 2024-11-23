@@ -116,8 +116,8 @@ public class Drive extends OpMode {
 
 
         if (gamepad2.dpad_down && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //bottom
-            hw.Lucket.setPosition(.025);  //originally 1
-            hw.Rucket.setPosition(.0);  //originally 1
+            hw.Lucket.setPosition(.04);  //originally 1
+            hw.Rucket.setPosition(.04);  //originally 1
 
         }
         else if (gamepad2.dpad_up && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //top
@@ -125,8 +125,6 @@ public class Drive extends OpMode {
             hw.Rucket.setPosition(.6  );  //originally 0
         }
 
-        //DO NOT CHANGE THIS WITHOUT A VERY GOOD REASON AND TALKING TO ME OR MRS. FIELD
-        //stop trying to use pid's you're making it confusing for no reason and comment my code out dont delete it dude
         if (gamepad2.a) {
             hw.Linear.setTargetPosition(25);
             hw.Rinear.setTargetPosition(25);

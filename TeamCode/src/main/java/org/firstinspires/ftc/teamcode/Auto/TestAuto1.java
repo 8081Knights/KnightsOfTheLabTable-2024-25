@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Auto;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -16,7 +17,7 @@ import java.util.List;
 public class TestAuto1 extends LinearOpMode {
 
     double[] initPositions = {0,0,0};
-    int currentInstruction;
+    int currentInstruction = 0;
     HardwareSoftware robot = new HardwareSoftware();
     List<NewPositionOfRobot> robotPoses = new ArrayList<>();
     SparkFunOTOS.Pose2D pos;
@@ -27,9 +28,11 @@ public class TestAuto1 extends LinearOpMode {
 
     public void initThis() {
         robot.init(hardwareMap);
-        currentPose.init(robot,initPositions[0],initPositions[1],initPositions[2]);
 
-        robotPoses.add(new NewPositionOfRobot(2,2,Math.PI));
+        robotPoses.add(new NewPositionOfRobot(-9,10,Math.PI *3 /4));
+        robotPoses.add(new NewPositionOfRobot(-15,4,Math.PI *3 /4));
+        robotPoses.add(new NewPositionOfRobot(-16,3,Math.PI *3 /4));
+
 
 
         robot.gyro.setLinearUnit(DistanceUnit.INCH);
@@ -43,6 +46,9 @@ public class TestAuto1 extends LinearOpMode {
         SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
         robot.gyro.setPosition(currentPosition);
 
+
+        currentPose.init(robot,initPositions[0],initPositions[1],initPositions[2]);
+
     }
 
 
@@ -53,6 +59,7 @@ public class TestAuto1 extends LinearOpMode {
         initThis();
 
         waitForStart();
+        double cerror;
 
         while (opModeIsActive() && !isStopRequested()) {
             pos = robot.gyro.getPosition();
@@ -66,9 +73,31 @@ public class TestAuto1 extends LinearOpMode {
             currentPose.gyR = pos.h;
 
             currentPose.updateRealRobotPositions(pos);
-            telemetry.addData("cerror ",currentPose.moveToSetPosition(robotPoses.get(0)));
 
+            cerror = currentPose.moveToSetPosition(robotPoses.get(currentInstruction));
 
+            telemetry.addData("cerror", cerror);
+
+            if (currentInstruction == 0) {
+                robot.Lucket.setPosition(.635);
+                robot.Rucket.setPosition(.6  );
+            }
+
+            if (currentInstruction == 1) {
+                robot.Linear.setTargetPosition(1250);
+                robot.Rinear.setTargetPosition(1250);
+
+                robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.Linear.setPower(1);
+                robot.Rinear.setPower(1);
+            }
+
+            if (Math.abs(cerror) < .2 && currentInstruction != 2) {
+                currentInstruction++;
+            }
+            telemetry.addData("cu", currentInstruction);
 
 
         }
@@ -154,16 +183,16 @@ public class TestAuto1 extends LinearOpMode {
             powdX = setPose.newx - realRobotX;
             powdY = setPose.newy - realRobotY;
 
-            if (powdX > 3) {
+            if (powdX > 3 || powdX < -3) {
                 powX = Math.signum(powdX);
             } else {
-                powX = powdX;
+                powX = powdX/3;
             }
 
-            if (powdY > 3) {
+            if (powdY > 3 || powdY < -3) {
                 powY = Math.signum(powdY);
             } else {
-                powY = powdY;
+                powY = powdY/3;
             }
 
             double[] altAngles = new double[3];
@@ -181,12 +210,29 @@ public class TestAuto1 extends LinearOpMode {
 
             int goodindex = 0;
 
-            if (Math.abs(diffAngles[1]) < Math.abs(diffAngles[2])) {
+            if (Math.abs(diffAngles[1]) < Math.abs(diffAngles[0])) {
                 goodindex =1;
+            }
+            if (Math.abs(diffAngles[2]) < Math.abs(diffAngles[0])) {
+                goodindex = 2;
+            }
+            if (Math.abs(diffAngles[2]) < Math.abs(diffAngles[1])) {
+                goodindex = 2;
+            }
+            if (Math.abs(diffAngles[1]) < Math.abs(diffAngles[2])) {
+                goodindex = 1;
             }
 
             rx = diffAngles[goodindex];
+
+            telemetry.addData("diffIn0", diffAngles[0]);
+            telemetry.addData("diffIn1", diffAngles[1]);
+            telemetry.addData("diffIn2", diffAngles[2]);
             //TODO: tune for similar logic above
+            powX = -powX;
+            powY = -powY;
+            double realSetX = powX * Math.cos(realRobotHeading) - powY * Math.sin(realRobotHeading);
+            double realSetY = powX * Math.sin(realRobotHeading) + powY * Math.cos(realRobotHeading);
 
             telemetry.addData("powx", powX);
             telemetry.addData("powy", powY);
@@ -194,19 +240,19 @@ public class TestAuto1 extends LinearOpMode {
 
 
 
-            robotHardwaremap.FLdrive.setPower((powY + powX - rx) / 3 * .8);
-            robotHardwaremap.BLdrive.setPower((powY - powX - rx) / 3 * .8);
-            robotHardwaremap.FRdrive.setPower((powY + powX + rx) / 3 * .8);
-            robotHardwaremap.BRdrive.setPower((powY - powX + rx) / 3 * .8);
+
+            rx =  rx / 3;
+
+            double denominator = Math.max(Math.abs(powY) + Math.abs(powX) + Math.abs(rx), 1);
+
+            robotHardwaremap.FLdrive.setPower((realSetY + realSetX - rx) / denominator * .4);
+            robotHardwaremap.BLdrive.setPower((realSetY - realSetX - rx) / denominator * .4);
+            robotHardwaremap.FRdrive.setPower((realSetY + realSetX + rx) / denominator * .4);
+            robotHardwaremap.BRdrive.setPower((realSetY - realSetX + rx) / denominator * .4);
             currentError = Math.abs(powdX) + Math.abs(powdY) + Math.abs(rx);
 
             return currentError;
         }
-    }
-
-    public class Action {
-
-
     }
 
     public static double normalizeAngle(double angle) {
