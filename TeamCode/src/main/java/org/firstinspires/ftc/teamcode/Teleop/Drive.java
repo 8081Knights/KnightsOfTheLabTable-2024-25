@@ -39,7 +39,7 @@ public class Drive extends OpMode {
     }
 
     double DS = 1;
-    boolean D = true;
+    boolean D = true, D2=true;
 
     // FixedLinear Vars
     double[] pidValues = {2, 0, 0};
@@ -96,7 +96,7 @@ public class Drive extends OpMode {
             hw.InLinear.setPower(gamepad1.left_trigger);
         }
         else if (gamepad1.right_trigger > .1) {
-            hw.InLinear.setPower(-gamepad1.right_trigger);
+            hw.InLinear.setPower(-gamepad1.right_trigger * .6);
         } else{
             hw.InLinear.setPower(0);
         }
@@ -116,13 +116,13 @@ public class Drive extends OpMode {
 
 
         if (gamepad2.dpad_down && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //bottom
-            hw.Lucket.setPosition(1);
-            hw.Rucket.setPosition(1);
+            hw.Lucket.setPosition(.025);  //originally 1
+            hw.Rucket.setPosition(.0);  //originally 1
 
         }
         else if (gamepad2.dpad_up && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //top
-            hw.Lucket.setPosition(0);
-            hw.Rucket.setPosition(0);
+            hw.Lucket.setPosition(.635);  //originally 0
+            hw.Rucket.setPosition(.6  );  //originally 0
         }
 
         //DO NOT CHANGE THIS WITHOUT A VERY GOOD REASON AND TALKING TO ME OR MRS. FIELD
@@ -137,8 +137,8 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.b) {
-            hw.Lucket.setPosition(.15);
-            hw.Rucket.setPosition(.35);
+            hw.Lucket.setPosition(.635);  //originally 0
+            hw.Rucket.setPosition(.6  );  //originally 0
 
             hw.Linear.setTargetPosition(1250);
             hw.Rinear.setTargetPosition(1250);
@@ -149,11 +149,11 @@ public class Drive extends OpMode {
             hw.Linear.setPower(1);
             hw.Rinear.setPower(1);
         } else if (gamepad2.y) {
-            hw.Lucket.setPosition(.15);
-            hw.Rucket.setPosition(.35);
+            hw.Lucket.setPosition(.635);  //originally 0
+            hw.Rucket.setPosition(.6  );  //originally 0
 
-            hw.Linear.setTargetPosition(3200);
-            hw.Rinear.setTargetPosition(3200);
+            hw.Linear.setTargetPosition(3150);
+            hw.Rinear.setTargetPosition(3150);
 
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
