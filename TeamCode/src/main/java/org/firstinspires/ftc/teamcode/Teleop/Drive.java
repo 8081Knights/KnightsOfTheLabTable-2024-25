@@ -5,6 +5,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import org.firstinspires.ftc.teamcode.HardwareSoftware;
@@ -38,7 +39,7 @@ public class Drive extends OpMode {
 
     }
 
-    double DS = 1;
+    double DS = .9;
     boolean D = true, D2=true;
 
     // FixedLinear Vars
@@ -50,6 +51,18 @@ public class Drive extends OpMode {
     int[] positionsEncoderValues = {0,0};
 
     boolean wasBumperPressed = false;  // Track previous bumper state
+
+    private static ElapsedTime myStopwatch = new ElapsedTime();
+
+    boolean isAButtonPressed = false;
+    boolean isBButtonPressed = false;
+    boolean isYButtonPressed = false;
+
+    boolean actionPerformedA = false;
+    boolean actionPerformedB = false;
+    boolean actionPerformedY = false;
+
+
 
 
     @Override
@@ -66,15 +79,17 @@ public class Drive extends OpMode {
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
         double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
-
+        telemetry.addData("newX", rotX);
+        telemetry.addData("newY", rotY);
+        telemetry.addData("rx", rx);
         rotX = rotX * 1.1;  // Counteract imperfect strafing
 
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
         hw.FLdrive().setPower(((rotY + rotX + rx) / denominator) * DS);
         hw.BLdrive().setPower(((rotY - rotX + rx) / denominator) * DS);
-        hw.FRdrive().setPower(((rotY + rotX - rx) / denominator) * DS);
-        hw.BRdrive().setPower(((rotY - rotX - rx) / denominator) * DS);
+        hw.FRdrive().setPower(((rotY - rotX - rx) / denominator) * DS);
+        hw.BRdrive().setPower(((rotY + rotX - rx) / denominator) * DS);
 
 
         if (gamepad1.right_bumper && !wasBumperPressed) {  // Check if bumper is pressed and was not previously pressed
@@ -82,7 +97,7 @@ public class Drive extends OpMode {
                 DS = 0.2;
                 D = false;
             } else {
-                DS = 1;
+                DS = .9;
                 D = true;
             }
             wasBumperPressed = true;  // Set flag to indicate bumper was pressed
@@ -92,17 +107,13 @@ public class Drive extends OpMode {
 
         // Gamepad #2
         // Intake Linear Slide
-        if(gamepad1.left_trigger > .1) {
+        if (gamepad1.left_trigger > .1) {
             hw.InLinear.setPower(gamepad1.left_trigger);
-        }
-        else if (gamepad1.right_trigger > .1) {
+        } else if (gamepad1.right_trigger > .1) {
             hw.InLinear.setPower(-gamepad1.right_trigger * .6);
-        } else{
+        } else {
             hw.InLinear.setPower(0);
         }
-
-
-
 
 
         if (gamepad2.left_bumper) {
@@ -114,93 +125,168 @@ public class Drive extends OpMode {
         }
 
 
-
         if (gamepad2.dpad_down && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //bottom
-            hw.Lucket.setPosition(.04);  //originally 1
-            hw.Rucket.setPosition(.04);  //originally 1
+            hw.Lucket.setPosition(.06);  //originally 1
+            hw.Rucket.setPosition(.06);  //originally 1
 
+        } else if (gamepad2.dpad_up && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //top
+            hw.Lucket.setPosition(.755);  //originally 0
+            hw.Rucket.setPosition(.73);  //originally 0
         }
-        else if (gamepad2.dpad_up && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //top
-            hw.Lucket.setPosition(.635);  //originally 0
-            hw.Rucket.setPosition(.6  );  //originally 0
-        }
-
+/*
         if (gamepad2.a) {
-            hw.Linear.setTargetPosition(25);
-            hw.Rinear.setTargetPosition(25);
+            if (!isAButtonPressed) {
+                // Move Lucket and Rucket immediately when the button is pressed
+                hw.Lucket.setPosition(0.755);  // originally 0
+                hw.Rucket.setPosition(0.73);   // originally 0
 
-            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                // Start the stopwatch to track the 0.5 seconds delay
+                myStopwatch.reset();
+                myStopwatch.startTime();
 
-            hw.Linear.setPower(1);
-            hw.Rinear.setPower(1);
+                // Mark the button as pressed to prevent repeated action
+                isAButtonPressed = true;
+                actionPerformedA = false;  // Reset action performed flag
+            }
+
+            // Perform the slide action after 0.5 seconds
+            if (myStopwatch.seconds() > 0.5 && !actionPerformedA) {
+                // Move the slide motors to their target positions
+                hw.Linear.setTargetPosition(25);
+                hw.Rinear.setTargetPosition(25);
+
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+
+                // Mark that the action has been performed, preventing repeat execution
+                actionPerformedA = true;
+            }
         } else if (gamepad2.b) {
-            hw.Lucket.setPosition(.635);  //originally 0
-            hw.Rucket.setPosition(.6  );  //originally 0
+            if (!isBButtonPressed) {
+                // Move Lucket and Rucket immediately when the button is pressed
+                hw.Lucket.setPosition(0.755);  // originally 0
+                hw.Rucket.setPosition(0.73);   // originally 0
 
-            hw.Linear.setTargetPosition(1250);
-            hw.Rinear.setTargetPosition(1250);
+                // Start the stopwatch to track the 0.5 seconds delay
+                myStopwatch.reset();
+                myStopwatch.startTime();
 
-            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                // Mark the button as pressed to prevent repeated action
+                isBButtonPressed = true;
+                actionPerformedB = false;  // Reset action performed flag
+            }
+/*
+            // Perform the slide action after 0.5 seconds
+            if (myStopwatch.seconds() > 0.5 && !actionPerformedB) {
+                // Move the slide motors to their target positions
+                hw.Linear.setTargetPosition(1250);
+                hw.Rinear.setTargetPosition(1250);
 
-            hw.Linear.setPower(1);
-            hw.Rinear.setPower(1);
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+
+                // Mark that the action has been performed, preventing repeat execution
+                actionPerformedB = true;
+            }
         } else if (gamepad2.y) {
-            hw.Lucket.setPosition(.635);  //originally 0
-            hw.Rucket.setPosition(.6  );  //originally 0
+            if (!isYButtonPressed) {
+                // Move Lucket and Rucket immediately when the button is pressed
+                hw.Lucket.setPosition(0.755);  // originally 0
+                hw.Rucket.setPosition(0.73);   // originally 0
 
-            hw.Linear.setTargetPosition(3150);
-            hw.Rinear.setTargetPosition(3150);
+                // Start the stopwatch to track the 0.5 seconds delay
+                myStopwatch.reset();
+                myStopwatch.startTime();
 
-            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                // Mark the button as pressed to prevent repeated action
+                isYButtonPressed = true;
+                actionPerformedY = false;  // Reset action performed flag
+            }
 
-            hw.Linear.setPower(1);
-            hw.Rinear.setPower(1);
+            // Perform the slide action after 0.5 seconds
+            if (myStopwatch.seconds() > 0.5 && !actionPerformedY) {
+                // Move the slide motors to their target positions
+                hw.Linear.setTargetPosition(3150);
+                hw.Rinear.setTargetPosition(3150);
+
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+
+                // Mark that the action has been performed, preventing repeat execution
+                actionPerformedY = true;
+            }
+        } else {
+            // Reset button flags and action flags when no button is pressed
+            isAButtonPressed = false;
+            isBButtonPressed = false;
+            isYButtonPressed = false;
+
+            // Reset action flags so that actions can be triggered again on the next button press
+            actionPerformedA = false;
+            actionPerformedB = false;
+            actionPerformedY = false;
         }
 
 
-//        if (gamepad2.a) {
-//            hw.Linear.setTargetPosition((int) (positions[0] * height / encoderValues[0]));
-//            hw.Rinear.setTargetPosition((int) (positions[0] * height / encoderValues[1]));
-//
-//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            hw.Linear.setPower(1);
-//            hw.Rinear.setPower(1);
-//        } else if (gamepad2.b) {
-//            hw.Linear.setTargetPosition((int) (positions[1] * height / encoderValues[0]));
-//            hw.Rinear.setTargetPosition((int) (positions[1] * height / encoderValues[1]));
-//
-//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            hw.Linear.setPower(1);
-//            hw.Rinear.setPower(1);
-//        } else if (gamepad2.y) {
-//            hw.Linear.setTargetPosition((int) (positions[2] * height / encoderValues[0]));
-//            hw.Rinear.setTargetPosition((int) (positions[2] * height / encoderValues[1]));
-//
-//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            hw.Linear.setPower(1);
-//            hw.Rinear.setPower(1);
-//        }
+*/
 
-        if (gamepad1.y && gamepad1.b){
-            hw.gyro().resetTracking();
+            if (gamepad2.a) {
+                hw.Linear.setTargetPosition(25);
+                hw.Rinear.setTargetPosition(25);
+
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+            } else if (gamepad2.b) {
+                hw.Lucket.setPosition(.6);  //originally 0
+                hw.Rucket.setPosition(.6);  //originally 0
+
+                hw.Linear.setTargetPosition(1250);
+                hw.Rinear.setTargetPosition(1250);
+
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+            } else if (gamepad2.y) {
+                hw.Lucket.setPosition(.63);  //originally 0
+                hw.Rucket.setPosition(.6);  //originally 0
+
+                hw.Linear.setTargetPosition(3300);
+                hw.Rinear.setTargetPosition(3300);
+
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+            }
+
+
+            if (gamepad1.y && gamepad1.b) {
+                hw.gyro().resetTracking();
+            }
+
+
+            telemetry.addData("bot heading", botHeading);
+            telemetry.addData("Lucket", hw.Lucket.getPosition());
+            telemetry.addData("Rucket", hw.Rucket.getPosition());
+            telemetry.addData("Timer", myStopwatch.seconds());
+            telemetry.update();
         }
 
-
-
-        telemetry.addData("bot heading", botHeading);
-        telemetry.addData("Lucket", hw.Lucket.getPosition());
-        telemetry.addData("Rucket", hw.Rucket.getPosition());
-        telemetry.update();
-    }
 
 
 }

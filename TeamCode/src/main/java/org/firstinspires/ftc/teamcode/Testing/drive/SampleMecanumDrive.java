@@ -24,6 +24,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -105,7 +106,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear = hardwareMap.get(DcMotorEx.class, "BRdrive");
         rightFront = hardwareMap.get(DcMotorEx.class, "FRdrive");
 
-        gyro = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+
+        gyro = hardwareMap.get(SparkFunOTOS.class, "gyro");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -285,10 +287,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
+        leftFront.setPower(-v);
         leftRear.setPower(v1);
         rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        rightFront.setPower(-v3);
     }
 
     @Override

@@ -69,10 +69,10 @@ public class HardwareSoftware {
         InLinear.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
-        FLdrive.setDirection(DcMotorEx.Direction.REVERSE);
-        FRdrive.setDirection(DcMotorEx.Direction.FORWARD);
-        BLdrive.setDirection(DcMotorEx.Direction.FORWARD);
-        BRdrive.setDirection(DcMotorEx.Direction.REVERSE);
+        FLdrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        BLdrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        FRdrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        BRdrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         Linear.setDirection(DcMotorSimple.Direction.REVERSE);
 

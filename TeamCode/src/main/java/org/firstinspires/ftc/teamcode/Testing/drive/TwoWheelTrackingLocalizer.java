@@ -45,6 +45,9 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     public static double PERPENDICULAR_X = 0;
     public static double PERPENDICULAR_Y = 0;
 
+    public static double X_MULTIPLIER = 1; // Multiplier in the X direction
+    public static double Y_MULTIPLIER = 7.655465808074423; // Multiplier in the Y direction
+
     SparkFunOTOS gyro;
 
     // Parallel/Perpendicular to the forward axis
@@ -85,8 +88,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     @Override
     public List<Double> getWheelPositions() {
         return Arrays.asList(
-                gyro.getPosition().y,
-                gyro.getPosition().x
+                gyro.getPosition().x * X_MULTIPLIER,
+                gyro.getPosition().y * Y_MULTIPLIER
         );
     }
 
@@ -98,8 +101,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getRawVelocity()),
-                encoderTicksToInches(perpendicularEncoder.getRawVelocity())
+                gyro.getPosition().x * X_MULTIPLIER,
+                gyro.getPosition().y * Y_MULTIPLIER
         );
     }
 }

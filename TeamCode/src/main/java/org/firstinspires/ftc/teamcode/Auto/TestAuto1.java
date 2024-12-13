@@ -4,6 +4,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Uhhh, BrUh (not comp)")
 public class TestAuto1 extends LinearOpMode {
 
@@ -25,14 +27,23 @@ public class TestAuto1 extends LinearOpMode {
 
     CurrentRobotPose currentPose = new CurrentRobotPose();
 
+    private static ElapsedTime myStopwatch1 = new ElapsedTime();
+
+    private static ElapsedTime myStopwatch2 = new ElapsedTime();
+
 
     public void initThis() {
         robot.init(hardwareMap);
 
-        robotPoses.add(new NewPositionOfRobot(-9,10,Math.PI *3 /4));
-        robotPoses.add(new NewPositionOfRobot(-15,4,Math.PI *3 /4));
-        robotPoses.add(new NewPositionOfRobot(-16,3,Math.PI *3 /4));
+        robot.FLdrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        robot.BLdrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        robot.FRdrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        robot.BRdrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        robotPoses.add(new NewPositionOfRobot(5  ,5 ,0));
+        robotPoses.add(new NewPositionOfRobot(-7  ,5 , Math.PI * 3 / 4 , .4));
+        robotPoses.add(new NewPositionOfRobot(-16.2,2 ,Math.PI * 3 / 4 , .3));
+        robotPoses.add(new NewPositionOfRobot(-7,38.5 ,Math.PI * 2 / 4 , .6));
 
 
         robot.gyro.setLinearUnit(DistanceUnit.INCH);
@@ -58,7 +69,10 @@ public class TestAuto1 extends LinearOpMode {
 
         initThis();
 
+
         waitForStart();
+
+
         double cerror;
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -66,6 +80,7 @@ public class TestAuto1 extends LinearOpMode {
             telemetry.addData("Posx", pos.x);
             telemetry.addData("Posy", pos.y);
             telemetry.addData("Posh", pos.h);
+            telemetry.addData("Step", currentInstruction);
             telemetry.update();
 
             currentPose.gyX = pos.x;
@@ -79,22 +94,63 @@ public class TestAuto1 extends LinearOpMode {
             telemetry.addData("cerror", cerror);
 
             if (currentInstruction == 0) {
-                robot.Lucket.setPosition(.635);
-                robot.Rucket.setPosition(.6  );
+                robot.Lucket.setPosition(.685);
+                robot.Rucket.setPosition(.65  );
+                myStopwatch1.reset();
+                myStopwatch1.startTime();
             }
+
 
             if (currentInstruction == 1) {
-                robot.Linear.setTargetPosition(1250);
-                robot.Rinear.setTargetPosition(1250);
 
-                robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                robot.Linear.setPower(1);
-                robot.Rinear.setPower(1);
+                if(myStopwatch1.seconds() > 1){
+                    robot.Linear.setTargetPosition(3200);
+                    robot.Rinear.setTargetPosition(3200);
+
+                    robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.Linear.setPower(1);
+                    robot.Rinear.setPower(1);
+                }
+
+                myStopwatch2.reset();
+                myStopwatch2.startTime();
+
             }
 
-            if (Math.abs(cerror) < .2 && currentInstruction != 2) {
+            if (currentInstruction == 3) {
+
+
+                if(myStopwatch2.seconds() > 1){
+                    robot.Linear.setTargetPosition(25);
+                    robot.Rinear.setTargetPosition(25);
+
+                    robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.Linear.setPower(1);
+                    robot.Rinear.setPower(1);
+                }
+
+                if(myStopwatch2.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
+                    robot.Lucket.setPosition(.06);
+                    robot.Rucket.setPosition(.06);
+                }
+
+            }
+
+            if (currentInstruction == 5) {
+                robot.Lucket.setPosition(.685);
+                robot.Rucket.setPosition(.65  );
+                myStopwatch1.reset();
+                myStopwatch1.startTime();
+            }
+
+
+//literally has less than .2 like 1/4 of the time so im making it larger
+            if (Math.abs(cerror) < 2 && currentInstruction != 4) {
                 currentInstruction++;
             }
             telemetry.addData("cu", currentInstruction);
@@ -111,8 +167,9 @@ public class TestAuto1 extends LinearOpMode {
      */
     public class NewPositionOfRobot {
         boolean justDrive;
-        double oldx, newx, oldy, newy;
-        double oldRotation, newRotation;
+        double newx, newy;
+        double newRotation;
+        double speed = .8;
         /**
          * Sets the robot's future position and rotation.
          *
@@ -124,6 +181,13 @@ public class TestAuto1 extends LinearOpMode {
             this.newx = nx;
             this.newy = ny;
             this.newRotation = newRot;
+            justDrive = true;
+        }
+        NewPositionOfRobot(double nx, double ny, double newRot, double setspeed) {
+            this.newx = nx;
+            this.newy = ny;
+            this.newRotation = newRot;
+            this.speed = setspeed;
             justDrive = true;
         }
 
@@ -228,27 +292,26 @@ public class TestAuto1 extends LinearOpMode {
             telemetry.addData("diffIn0", diffAngles[0]);
             telemetry.addData("diffIn1", diffAngles[1]);
             telemetry.addData("diffIn2", diffAngles[2]);
-            //TODO: tune for similar logic above
-            powX = -powX;
-            powY = -powY;
-            double realSetX = powX * Math.cos(realRobotHeading) - powY * Math.sin(realRobotHeading);
-            double realSetY = powX * Math.sin(realRobotHeading) + powY * Math.cos(realRobotHeading);
+
+
+            double realSetY = powY * Math.cos(realRobotHeading) - powX * Math.sin(realRobotHeading);
+            double realSetX = powY * Math.sin(realRobotHeading) + powX * Math.cos(realRobotHeading);
 
             telemetry.addData("powx", powX);
             telemetry.addData("powy", powY);
+            telemetry.addData("realSetX", realSetX);
+            telemetry.addData("realSetY", realSetY);
             telemetry.addData("rx", rx);
 
 
 
 
-            rx =  rx / 3;
-
             double denominator = Math.max(Math.abs(powY) + Math.abs(powX) + Math.abs(rx), 1);
 
-            robotHardwaremap.FLdrive.setPower((realSetY + realSetX - rx) / denominator * .4);
-            robotHardwaremap.BLdrive.setPower((realSetY - realSetX - rx) / denominator * .4);
-            robotHardwaremap.FRdrive.setPower((realSetY + realSetX + rx) / denominator * .4);
-            robotHardwaremap.BRdrive.setPower((realSetY - realSetX + rx) / denominator * .4);
+            robot.FLdrive.setPower((( -realSetY - realSetX - rx) / denominator) * setPose.speed);
+            robot.BLdrive.setPower((( -realSetY + realSetX - rx) / denominator) * setPose.speed);
+            robot.FRdrive.setPower((( -realSetY + realSetX + rx) / denominator) * setPose.speed);
+            robot.BRdrive.setPower((( -realSetY - realSetX + rx) / denominator) * setPose.speed);
             currentError = Math.abs(powdX) + Math.abs(powdY) + Math.abs(rx);
 
             return currentError;
