@@ -66,6 +66,9 @@ public class TestTelop extends OpMode {
         robot.FRdrive.setPower((( -rotY + rotX + rx) / denominator) * .8);
         robot.BRdrive.setPower((( -rotY - rotX + rx) / denominator) * .8);
 
+        robot.InLinear.setPower(gamepad1.right_trigger - gamepad1.left_trigger);
+        telemetry.addData("intakePos", robot.InLinear.getCurrentPosition());
+
 //        robot.FLdrive.setPower(y);
 //        robot.BLdrive.setPower(y);
 //        robot.FRdrive.setPower(y);

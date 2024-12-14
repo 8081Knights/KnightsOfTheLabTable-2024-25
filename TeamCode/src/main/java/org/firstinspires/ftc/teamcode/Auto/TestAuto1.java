@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.HardwareSoftware;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,7 @@ public class TestAuto1 extends LinearOpMode {
 
     double[] initPositions = {0,0,0};
     int currentInstruction = 0;
+    boolean isOkToMoveOn = true;
     HardwareSoftware robot = new HardwareSoftware();
     List<NewPositionOfRobot> robotPoses = new ArrayList<>();
     SparkFunOTOS.Pose2D pos;
@@ -27,9 +29,13 @@ public class TestAuto1 extends LinearOpMode {
 
     CurrentRobotPose currentPose = new CurrentRobotPose();
 
-    private static ElapsedTime myStopwatch1 = new ElapsedTime();
+    private ElapsedTime myStopwatch1 = new ElapsedTime();
+    private ElapsedTime myStopwatch2 = new ElapsedTime();
+    private ElapsedTime pickupWatch1 = new ElapsedTime();
+    boolean pickup1Started = false;
 
-    private static ElapsedTime myStopwatch2 = new ElapsedTime();
+    private ElapsedTime dropoffWatch1 = new ElapsedTime();
+    boolean dropoff1Started = false;
 
 
     public void initThis() {
@@ -40,10 +46,20 @@ public class TestAuto1 extends LinearOpMode {
         robot.FRdrive.setDirection(DcMotorSimple.Direction.REVERSE);
         robot.BRdrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        robotPoses.add(new NewPositionOfRobot(5  ,5 ,0));
-        robotPoses.add(new NewPositionOfRobot(-7  ,5 , Math.PI * 3 / 4 , .4));
-        robotPoses.add(new NewPositionOfRobot(-16.2,2 ,Math.PI * 3 / 4 , .3));
-        robotPoses.add(new NewPositionOfRobot(-7,38.5 ,Math.PI * 2 / 4 , .6));
+        robot.InLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.InLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        robotPoses.add(new NewPositionOfRobot(5    ,5 ,0));
+        robotPoses.add(new NewPositionOfRobot(-7   ,5 ,Math.PI * 3 / 4 , .4));
+        robotPoses.add(new NewPositionOfRobot(-16.2,2 ,Math.PI * 3 / 4 , .4));
+        robotPoses.add(new NewPositionOfRobot(-7,38.5 ,Math.PI * 1 / 2 , .8));
+        robotPoses.add(new NewPositionOfRobot( 2,36.5 ,Math.PI * 1 / 2 , .6));
+        robotPoses.add(new NewPositionOfRobot( 2,36.5 ,Math.PI * 1 / 2 , .6));
+        robotPoses.add(new NewPositionOfRobot(-5,21   ,Math.PI * 1 / 2 , .6));
+        robotPoses.add(new NewPositionOfRobot(-7   ,5 ,Math.PI * 3 / 4 , .4));
+        robotPoses.add(new NewPositionOfRobot(-16.2,2 ,Math.PI * 3 / 4 , .4));
+
 
 
         robot.gyro.setLinearUnit(DistanceUnit.INCH);
@@ -80,7 +96,6 @@ public class TestAuto1 extends LinearOpMode {
             telemetry.addData("Posx", pos.x);
             telemetry.addData("Posy", pos.y);
             telemetry.addData("Posh", pos.h);
-            telemetry.addData("Step", currentInstruction);
             telemetry.update();
 
             currentPose.gyX = pos.x;
@@ -94,19 +109,17 @@ public class TestAuto1 extends LinearOpMode {
             telemetry.addData("cerror", cerror);
 
             if (currentInstruction == 0) {
-                robot.Lucket.setPosition(.685);
-                robot.Rucket.setPosition(.65  );
+                robot.Lucket.setPosition(.755);  //originally 0
+                robot.Rucket.setPosition(.73);  //originally 0
                 myStopwatch1.reset();
                 myStopwatch1.startTime();
             }
 
 
             if (currentInstruction == 1) {
-
-
                 if(myStopwatch1.seconds() > 1){
-                    robot.Linear.setTargetPosition(3200);
-                    robot.Rinear.setTargetPosition(3200);
+                    robot.Linear.setTargetPosition(3060);
+                    robot.Rinear.setTargetPosition(3060);
 
                     robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -117,7 +130,6 @@ public class TestAuto1 extends LinearOpMode {
 
                 myStopwatch2.reset();
                 myStopwatch2.startTime();
-
             }
 
             if (currentInstruction == 3) {
@@ -133,24 +145,77 @@ public class TestAuto1 extends LinearOpMode {
                     robot.Linear.setPower(1);
                     robot.Rinear.setPower(1);
                 }
+            }
 
+
+            if (currentInstruction == 4) {
                 if(myStopwatch2.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
                     robot.Lucket.setPosition(.06);
                     robot.Rucket.setPosition(.06);
                 }
-
             }
+
 
             if (currentInstruction == 5) {
-                robot.Lucket.setPosition(.685);
-                robot.Rucket.setPosition(.65  );
-                myStopwatch1.reset();
-                myStopwatch1.startTime();
+                if (!pickup1Started) {
+                    pickupWatch1.reset();
+                    pickupWatch1.startTime();
+                    pickup1Started = true;
+                }
+                robot.Intake.setPower(.7);
+                telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " +  robot.InLinear.getTargetPosition());
+                robot.InLinear.setTargetPosition(-1300);
+                robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.InLinear.setPower(.5);
+                if (Math.abs(robot.InLinear.getCurrentPosition() + 1300) > 30 || pickupWatch1.seconds() < 3) {
+                    isOkToMoveOn = false;
+                } else {
+                    isOkToMoveOn = true;
+                }
             }
+            if (currentInstruction == 6) {
+                robot.Intake.setPower(0);
+                robot.InLinear.setTargetPosition(-0);
+                robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.InLinear.setPower(.5);
+                if (Math.abs(robot.InLinear.getCurrentPosition()) > 20) {
+                    isOkToMoveOn = false;
+                } else {
+                    isOkToMoveOn = true;
+                }
+            }
+            if (currentInstruction == 7) {
+                if (!dropoff1Started) {
+                    dropoffWatch1.reset();
+                    dropoffWatch1.startTime();
+                    dropoff1Started = true;
+                }
+                robot.Intake.setPower(-.4);
+                if(dropoffWatch1.seconds() < .75) {
+                    isOkToMoveOn = false;
+                }else {
+                    isOkToMoveOn = true;
+                    robot.Lucket.setPosition(.755);  //originally 0
+                    robot.Rucket.setPosition(.73);   //originally 0
+                    robot.Intake.setPower(0);
+                }
+            }
+            if (currentInstruction == 8) {
+                robot.Linear.setTargetPosition(3060);
+
+                robot.Rinear.setTargetPosition(3060);
+
+                robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.Linear.setPower(1);
+                robot.Rinear.setPower(1);
+            }
+
 
 
 //literally has less than .2 like 1/4 of the time so im making it larger
-            if (Math.abs(cerror) < 2 && currentInstruction != 4) {
+            if (Math.abs(cerror) < 1 && currentInstruction != 8 && isOkToMoveOn) {
                 currentInstruction++;
             }
             telemetry.addData("cu", currentInstruction);
