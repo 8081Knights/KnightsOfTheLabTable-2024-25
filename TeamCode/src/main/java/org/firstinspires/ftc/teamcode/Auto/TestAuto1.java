@@ -91,6 +91,7 @@ public class TestAuto1 extends LinearOpMode {
 
         double cerror;
 
+
         while (opModeIsActive() && !isStopRequested()) {
             pos = robot.gyro.getPosition();
             telemetry.addData("Posx", pos.x);
