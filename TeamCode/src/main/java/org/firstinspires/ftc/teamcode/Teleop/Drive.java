@@ -175,21 +175,93 @@ public class Drive extends OpMode {
 
         }
         if (gamepad2.y) {
-            hw.Rucket.setPosition(.18);
-            hw.Lucket.setPosition(.27);
+            if (!isYButtonPressed) {
+                // Move Lucket and Rucket immediately when the button is pressed
+                hw.Lucket.setPosition(0.18);  // originally 0
+                hw.Rucket.setPosition(0.27);   // originally 0
 
-            positionOfSlides = 3300;
+                // Start the stopwatch to track the 0.5 seconds delay
+                myStopwatch.reset();
+                myStopwatch.startTime();
 
+                // Mark the button as pressed to prevent repeated action
+                isYButtonPressed = true;
+                actionPerformedY = false;  // Reset action performed flag
+            }
 
+            // Perform the slide action after 0.5 seconds
+            if ( !actionPerformedY) {
+                //myStopwatch.seconds() > 0.5 &&
+                // Move the slide motors to their target positions
+                hw.Linear.setTargetPosition(3150);
+                hw.Rinear.setTargetPosition(3150);
 
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+
+                // Mark that the action has been performed, preventing repeat execution
+                actionPerformedY = true;
+            }
+        } else {
+            // Reset the flag when the button is released
+            isYButtonPressed = false;
         }
 
+// Reset all flags and action flags when no button is pressed (this part is optional depending on the behavior you want)
+        if (!gamepad2.b && !gamepad2.y) {
+            // Reset flags for button presses
+            isBButtonPressed = false;
+            isYButtonPressed = false;
 
-        hw.Rinear.setTargetPosition(positionOfSlides);
-        hw.Linear.setTargetPosition(positionOfSlides);
+            // Reset action flags so that actions can be triggered again on the next button press
+            actionPerformedB = false;
+            actionPerformedY = false;
+        }
 
-        hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (gamepad2.a) {
+                hw.Linear.setTargetPosition(25);
+                hw.Rinear.setTargetPosition(25);
+
+                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                hw.Linear.setPower(1);
+                hw.Rinear.setPower(1);
+            }
+//             else if (gamepad2.b) {
+//                hw.Lucket.setPosition(.63);  //originally 0
+//                hw.Rucket.setPosition(.71);  //originally 0
+//
+//                hw.Linear.setTargetPosition(1250);
+//                hw.Rinear.setTargetPosition(1250);
+//
+//                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//                hw.Linear.setPower(1);
+//                hw.Rinear.setPower(1);
+//            } else if (gamepad2.y) {
+//                hw.Lucket.setPosition(.63);  //originally 0
+//                hw.Rucket.setPosition(.71);  //originally 0
+//
+//                hw.Linear.setTargetPosition(3150);
+//                hw.Rinear.setTargetPosition(3150);
+//
+//                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//                hw.Linear.setPower(1);
+//                hw.Rinear.setPower(1);
+//            }
+            else if (gamepad1.left_bumper) {
+            hw.Linear.setTargetPosition(1000);
+            hw.Rinear.setTargetPosition(1000);
+
+            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         hw.Rinear.setPower(1);
         hw.Linear.setPower(1);
