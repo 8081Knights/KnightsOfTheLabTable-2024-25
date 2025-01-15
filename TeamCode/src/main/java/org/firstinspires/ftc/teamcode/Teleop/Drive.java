@@ -203,7 +203,8 @@ public class Drive extends OpMode {
             }
 
             // Perform the slide action after 0.5 seconds
-            if (myStopwatch.seconds() > 0.5 && !actionPerformedY) {
+            if ( !actionPerformedY) {
+                //myStopwatch.seconds() > 0.5 &&
                 // Move the slide motors to their target positions
                 hw.Linear.setTargetPosition(3150);
                 hw.Rinear.setTargetPosition(3150);
