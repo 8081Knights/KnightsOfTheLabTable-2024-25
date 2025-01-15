@@ -157,10 +157,10 @@ public class Drive extends OpMode {
 // For button Y press
 
         if (gamepad2.a) {
-            hw.Rucket.setPosition(.18);
-            hw.Lucket.setPosition(.27);
+//            hw.Rucket.setPosition(.18);
+//            hw.Lucket.setPosition(.27);
 
-            positionOfSlides = 0;
+            positionOfSlides = 25;
 
 
         }
@@ -169,7 +169,7 @@ public class Drive extends OpMode {
             hw.Rucket.setPosition(.18);
             hw.Lucket.setPosition(.27);
 
-            positionOfSlides = 0;
+            positionOfSlides = 1250;
 
 
 
@@ -178,7 +178,7 @@ public class Drive extends OpMode {
             hw.Rucket.setPosition(.18);
             hw.Lucket.setPosition(.27);
 
-            positionOfSlides = 0;
+            positionOfSlides = 3300;
 
 
 
@@ -191,8 +191,8 @@ public class Drive extends OpMode {
         hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        hw.Rinear.setPower(.8);
-        hw.Linear.setPower(.8);
+        hw.Rinear.setPower(1);
+        hw.Linear.setPower(1);
 
 
 
