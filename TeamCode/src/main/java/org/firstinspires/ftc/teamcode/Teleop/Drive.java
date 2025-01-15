@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.HardwareSoftware;
 @TeleOp(name="Drive")
 public class Drive extends OpMode {
 
+    int positionOfSlides = 0;
+
 
 
 
@@ -150,150 +152,53 @@ public class Drive extends OpMode {
             hw.Rinear().setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         }
 
-// For button B press
-        if (gamepad2.b) {
-            if (!isBButtonPressed) {
-                // Move Lucket and Rucket immediately when the button is pressed
-                hw.Lucket.setPosition(0.755);  // originally 0
-                hw.Rucket.setPosition(0.73);   // originally 0
 
-                // Start the stopwatch to track the 0.5 seconds delay
-                myStopwatch.reset();
-                myStopwatch.startTime();
-
-                // Mark the button as pressed to prevent repeated action
-                isBButtonPressed = true;
-                actionPerformedB = false;  // Reset action performed flag
-            }
-
-            // Perform the slide action after 0.5 seconds
-            if (myStopwatch.seconds() > 0.5 && !actionPerformedB) {
-                // Move the slide motors to their target positions
-                hw.Linear.setTargetPosition(1250);
-                hw.Rinear.setTargetPosition(1250);
-
-                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                hw.Linear.setPower(1);
-                hw.Rinear.setPower(1);
-
-                // Mark that the action has been performed, preventing repeat execution
-                actionPerformedB = true;
-            }
-        } else {
-            // Reset the flag when the button is released
-            isBButtonPressed = false;
-        }
 
 // For button Y press
+
+        if (gamepad2.a) {
+            hw.Rucket.setPosition(.18);
+            hw.Lucket.setPosition(.27);
+
+            positionOfSlides = 0;
+
+
+        }
+        if (gamepad2.b) {
+
+            hw.Rucket.setPosition(.18);
+            hw.Lucket.setPosition(.27);
+
+            positionOfSlides = 0;
+
+
+
+        }
         if (gamepad2.y) {
-            if (!isYButtonPressed) {
-                // Move Lucket and Rucket immediately when the button is pressed
-                hw.Lucket.setPosition(0.18);  // originally 0
-                hw.Rucket.setPosition(0.27);   // originally 0
+            hw.Rucket.setPosition(.18);
+            hw.Lucket.setPosition(.27);
 
-                // Start the stopwatch to track the 0.5 seconds delay
-                myStopwatch.reset();
-                myStopwatch.startTime();
+            positionOfSlides = 0;
 
-                // Mark the button as pressed to prevent repeated action
-                isYButtonPressed = true;
-                actionPerformedY = false;  // Reset action performed flag
-            }
 
-            // Perform the slide action after 0.5 seconds
-            if (myStopwatch.seconds() > 0.5 && !actionPerformedY) {
-                // Move the slide motors to their target positions
-                hw.Linear.setTargetPosition(3150);
-                hw.Rinear.setTargetPosition(3150);
 
-                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                hw.Linear.setPower(1);
-                hw.Rinear.setPower(1);
-
-                // Mark that the action has been performed, preventing repeat execution
-                actionPerformedY = true;
-            }
-        } else {
-            // Reset the flag when the button is released
-            isYButtonPressed = false;
         }
 
-// Reset all flags and action flags when no button is pressed (this part is optional depending on the behavior you want)
-        if (!gamepad2.b && !gamepad2.y) {
-            // Reset flags for button presses
-            isBButtonPressed = false;
-            isYButtonPressed = false;
 
-            // Reset action flags so that actions can be triggered again on the next button press
-            actionPerformedB = false;
-            actionPerformedY = false;
-        }
+        hw.Rinear.setTargetPosition(positionOfSlides);
+        hw.Linear.setTargetPosition(positionOfSlides);
 
-            if (gamepad2.a) {
-                hw.Linear.setTargetPosition(25);
-                hw.Rinear.setTargetPosition(25);
+        hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                hw.Linear.setPower(1);
-                hw.Rinear.setPower(1);
-            }
-//             else if (gamepad2.b) {
-//                hw.Lucket.setPosition(.63);  //originally 0
-//                hw.Rucket.setPosition(.71);  //originally 0
-//
-//                hw.Linear.setTargetPosition(1250);
-//                hw.Rinear.setTargetPosition(1250);
-//
-//                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//                hw.Linear.setPower(1);
-//                hw.Rinear.setPower(1);
-//            } else if (gamepad2.y) {
-//                hw.Lucket.setPosition(.63);  //originally 0
-//                hw.Rucket.setPosition(.71);  //originally 0
-//
-//                hw.Linear.setTargetPosition(3150);
-//                hw.Rinear.setTargetPosition(3150);
-//
-//                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//                hw.Linear.setPower(1);
-//                hw.Rinear.setPower(1);
-//            }
-            else if (gamepad1.left_bumper) {
-            hw.Linear.setTargetPosition(1000);
-            hw.Rinear.setTargetPosition(1000);
-
-            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            hw.Linear.setPower(1);
-            hw.Rinear.setPower(1);
-        }   else if (gamepad1.dpad_up) {
-                hw.Linear.setTargetPosition(3250);
-                hw.Rinear.setTargetPosition(3250);
-
-                hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                hw.Linear.setPower(1);
-                hw.Rinear.setPower(1);
-            }
-
-            if (gamepad1.y && gamepad1.b) {
-                hw.gyro().resetTracking();
-            }
+        hw.Rinear.setPower(.8);
+        hw.Linear.setPower(.8);
 
 
-            telemetry.addData("bot heading", botHeading);
+
+
+
+        telemetry.addData("bot heading", botHeading);
             telemetry.addData("Lucket", hw.Lucket.getPosition());
             telemetry.addData("Rucket", hw.Rucket.getPosition());
             telemetry.addData("Timer", myStopwatch.seconds());
