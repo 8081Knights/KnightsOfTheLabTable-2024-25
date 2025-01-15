@@ -52,6 +52,10 @@ public class LinearTest extends OpMode {
             hw.Rinear.setPower(0);
         }
 
+        telemetry.addData("Linear", hw.Linear.getCurrentPosition());
+        telemetry.addData("Rinear", hw.Rinear.getCurrentPosition());
+        telemetry.update();
+
 
     }
 
