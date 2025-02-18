@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+@Autonomous(name="Specimen Auto")
 public class BetterAuto extends OpMode {
 
     double[] initPositions = {0,0,0};
@@ -38,6 +41,11 @@ public class BetterAuto extends OpMode {
         robot.InLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.InLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        robotPoses.add(new NewPositionOfRobot(0,15,0));
+        robotPoses.add(new NewPositionOfRobot(15,15,0));
+
+
+
         robot.gyro.setLinearUnit(DistanceUnit.INCH);
         robot.gyro.setAngularUnit(AngleUnit.RADIANS);
         SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
@@ -55,6 +63,27 @@ public class BetterAuto extends OpMode {
 
     @Override
     public void loop() {
+        switch (currentInstruction) {
+            case 0: {
+                robot.Lucket.setPosition(.82);
+                robot.Rucket.setPosition(.90);
+
+//                robot.Linear.setTargetPosition(1900);
+//                robot.Rinear.setTargetPosition(1900);
+//
+//                robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//                robot.Linear.setPower(1);
+//                robot.Rinear.setPower(1);
+                break;
+            }
+            case 1: {
+                robot.Lucket.setPosition(.82);
+                robot.Rucket.setPosition(.90);
+                break;
+            }
+        }
 
     }
 

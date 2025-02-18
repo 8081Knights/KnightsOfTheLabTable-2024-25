@@ -17,8 +17,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.kauailabs.navx.ftc.AHRS;
-import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
@@ -77,10 +75,8 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    private IMU imu;
+    SparkFunOTOS imu;
     private VoltageSensor batteryVoltageSensor;
-
-    private SparkFunOTOS gyro;
 
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
@@ -100,14 +96,20 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
+        imu = hardwareMap.get(SparkFunOTOS.class, "gyro");
+        imu.setAngularUnit(AngleUnit.RADIANS);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "FLdrive");
         leftRear = hardwareMap.get(DcMotorEx.class, "BLdrive");
         rightRear = hardwareMap.get(DcMotorEx.class, "BRdrive");
         rightFront = hardwareMap.get(DcMotorEx.class, "FRdrive");
 
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        gyro = hardwareMap.get(SparkFunOTOS.class, "gyro");
+        imu.calibrateImu();
+        imu.resetTracking();
+
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -133,7 +135,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
         // TODO: if desired, use setLocalizer() to change the localization method
-         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
@@ -167,6 +169,9 @@ public class SampleMecanumDrive extends MecanumDrive {
                         .turn(angle)
                         .build()
         );
+
+
+
     }
 
     public void turn(double angle) {
@@ -287,21 +292,21 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(-v);
+        leftFront.setPower(v);
         leftRear.setPower(v1);
         rightRear.setPower(v2);
-        rightFront.setPower(-v3);
+        rightFront.setPower(v3);
     }
 
     @Override
     public double getRawExternalHeading() {
-        SparkFunOTOS.Pose2D pos = gyro.getPosition();
-        return pos.h;
+        double heading = -imu.getPosition().h;
+        return heading;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+        return (double) imu.getVelocity().h;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

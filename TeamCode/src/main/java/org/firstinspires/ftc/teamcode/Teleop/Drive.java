@@ -94,6 +94,13 @@ public class Drive extends OpMode {
         hw.FRdrive().setPower(((rotY - rotX - rx) / denominator) * DS);
         hw.BRdrive().setPower(((rotY + rotX - rx) / denominator) * DS);
 
+        if(gamepad2.right_trigger > .1){
+            hw.MrMini().setPosition(1);
+        }
+        if(gamepad2.left_trigger > .1){
+            hw.MrMini().setPosition(0);
+        }
+
 
         if (gamepad1.right_bumper && !wasBumperPressed) {  // Check if bumper is pressed and was not previously pressed
             if (D) {
@@ -142,6 +149,7 @@ public class Drive extends OpMode {
             hw.Rinear().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             hw.Linear().setPower(-.8);
             hw.Rinear().setPower(-.8);
+            hw.MrMini().setPosition(0);
 
         } else if (hw.Linear().getMode() == DcMotorEx.RunMode.RUN_USING_ENCODER) {
             hw.Linear().setPower(0);
@@ -163,15 +171,15 @@ public class Drive extends OpMode {
             hw.Rucket.setPosition(.18);  //originally 1
 
         } else if (gamepad2.dpad_up) {  //top
-            hw.Lucket.setPosition(.73);  //originally 0
-            hw.Rucket.setPosition(.81);  //originally 0
+            hw.Lucket.setPosition(.71);
+            hw.Rucket.setPosition(.79);
         }
 
         if (gamepad2.x) {
             hw.Linear.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
             hw.Rinear.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-            hw.Linear.setPower(-.5);
-            hw.Rinear.setPower(-.5);
+            hw.Linear.setPower(-.7);
+            hw.Rinear.setPower(-.7);
         }
         if(gamepad2.x && hw.Linear.getMode() == DcMotorEx.RunMode.RUN_WITHOUT_ENCODER) {
             hw.Linear.setPower(0);
@@ -183,8 +191,12 @@ public class Drive extends OpMode {
             hw.Rinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         }
 
+        if (gamepad1.share) {
+            hw.InLinear.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
         if (gamepad1.a) {
-            hw.InLinear.setTargetPosition(-121);
+            hw.InLinear.setTargetPosition(-175);
 
 
             hw.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -196,12 +208,11 @@ public class Drive extends OpMode {
 // For button Y press
 
         if (gamepad2.a) {
-            hw.Lucket.setPosition(0.15);
-            hw.Rucket.setPosition(0.24);
+            hw.Lucket.setPosition(0.23);
+            hw.Rucket.setPosition(0.32);
 
             hw.Linear.setTargetPosition(40);
             hw.Rinear.setTargetPosition(40);
-
             hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -212,8 +223,8 @@ public class Drive extends OpMode {
         if (gamepad2.b) {
             if (!isBButtonPressed) {
                 // Move Lucket and Rucket immediately when the button is pressed
-                hw.Lucket.setPosition(0.755);  // originally 0
-                hw.Rucket.setPosition(0.73);   // originally 0
+                hw.Lucket.setPosition(.71);
+                hw.Rucket.setPosition(.79);
 
                 // Start the stopwatch to track the 0.5 seconds delay
                 myStopwatch.reset();
@@ -247,8 +258,8 @@ public class Drive extends OpMode {
         if (gamepad2.y) {
             if (!isYButtonPressed) {
                 // Move Lucket and Rucket immediately when the button is pressed
-                hw.Lucket.setPosition(0.18);  // originally 0
-                hw.Rucket.setPosition(0.27);   // originally 0
+                hw.Lucket.setPosition(.71);
+                hw.Rucket.setPosition(.79);
 
                 // Start the stopwatch to track the 0.5 seconds delay
                 myStopwatch.reset();
@@ -317,16 +328,16 @@ public class Drive extends OpMode {
 //                hw.Linear.setPower(1);
 //                hw.Rinear.setPower(1);
 //            }
-        else if (gamepad1.left_bumper) {
-            hw.Linear.setTargetPosition(1000);
-            hw.Rinear.setTargetPosition(1000);
-
-            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            hw.Rinear.setPower(1);
-            hw.Linear.setPower(1);
-        }
+//        else if (gamepad1.left_bumper) {
+//            hw.Linear.setTargetPosition(1000);
+//            hw.Rinear.setTargetPosition(1000);
+//
+//            hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            hw.Rinear.setPower(1);
+//            hw.Linear.setPower(1);
+//        }
 
         if (gamepad1.y && gamepad1.b) {
             hw.gyro().resetTracking();

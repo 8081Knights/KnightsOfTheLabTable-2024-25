@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-@Autonomous(name="Uhhh, BrUh (not comp)")
+@Autonomous(name="Auto Comp")
 public class TestAuto1 extends LinearOpMode {
 
     double[] initPositions = {0,0,0};
@@ -55,19 +55,19 @@ public class TestAuto1 extends LinearOpMode {
 
 
         robotPoses.add(new NewPositionOfRobot(5    ,5   ,0));
-        robotPoses.add(new NewPositionOfRobot(-7   ,5   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot(-16.2,4   ,Math.PI * 3 / 4 , .5));
+        robotPoses.add(new NewPositionOfRobot(0   ,11   ,Math.PI * 3 / 4 , .5));
+        robotPoses.add(new NewPositionOfRobot(-16.2,4   ,Math.PI * 3 / 4 , .6));
         robotPoses.add(new NewPositionOfRobot(-7   ,38.5,Math.PI / 2 , .8));
-        robotPoses.add(new NewPositionOfRobot( 2   ,35.0,Math.PI / 2 , .6));
-        robotPoses.add(new NewPositionOfRobot( 2   ,35.0,Math.PI / 2 , .6));
-        robotPoses.add(new NewPositionOfRobot(-5   ,21  ,Math.PI / 2 , .6));
+        robotPoses.add(new NewPositionOfRobot( 2   ,34.0,Math.PI / 2 , .7));
+        robotPoses.add(new NewPositionOfRobot( 2   ,34.0,Math.PI / 2 , .7));
+        robotPoses.add(new NewPositionOfRobot(-5   ,21  ,Math.PI / 2 , .7));
         robotPoses.add(new NewPositionOfRobot(-7   ,5   ,Math.PI * 3 / 4 , .5));
         robotPoses.add(new NewPositionOfRobot(-7   ,8   ,Math.PI * 3 / 4 , .5));
         robotPoses.add(new NewPositionOfRobot(-16.2,4   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot( 2   ,35.0,0 , .5));
-        robotPoses.add(new NewPositionOfRobot(-11  ,35.0,Math.PI / 2 , .7));
-        robotPoses.add(new NewPositionOfRobot(-11  ,35.0,Math.PI / 2 , .5));
-        robotPoses.add(new NewPositionOfRobot(-11  ,35.0,Math.PI / 2 , .5));
+        robotPoses.add(new NewPositionOfRobot( 2   ,34.0,0 , .5));
+        robotPoses.add(new NewPositionOfRobot(-11  ,34.0,Math.PI / 2 , .7));
+        robotPoses.add(new NewPositionOfRobot(-7  ,34.0,Math.PI / 2 , .6));
+        robotPoses.add(new NewPositionOfRobot(-7  ,34.0,Math.PI / 2 , .6));
 
 
 
@@ -131,8 +131,8 @@ public class TestAuto1 extends LinearOpMode {
 
             if (currentInstruction == 1) {
                 if(myStopwatch1.seconds() > 1){
-                    robot.Linear.setTargetPosition(3150);
-                    robot.Rinear.setTargetPosition(3150);
+                    robot.Linear.setTargetPosition(3100);
+                    robot.Rinear.setTargetPosition(3100);
 
                     robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -162,8 +162,8 @@ public class TestAuto1 extends LinearOpMode {
 
             if (currentInstruction == 4) {
                 if(myStopwatch2.seconds() > 1.5 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
-                    robot.Lucket.setPosition(.04);  //originally 1
-                    robot.Rucket.setPosition(.13);  //originally 1
+                    robot.Lucket.setPosition(.11);  //originally 1
+                    robot.Rucket.setPosition(.18);  //originally 1
                 }
             }
 
@@ -176,10 +176,10 @@ public class TestAuto1 extends LinearOpMode {
                 }
                 robot.Intake.setPower(.7);
                 telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " +  robot.InLinear.getTargetPosition());
-                robot.InLinear.setTargetPosition(-1300);
+                robot.InLinear.setTargetPosition(-1500);
                 robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.InLinear.setPower(.5);
-                if (Math.abs(robot.InLinear.getCurrentPosition() + 1300) > 30 || pickupWatch1.seconds() < 3) {
+                if (Math.abs(robot.InLinear.getCurrentPosition() + 1500) > 30 || pickupWatch1.seconds() < 3) {
                     isOkToMoveOn = false;
                 } else {
                     isOkToMoveOn = true;
@@ -187,10 +187,10 @@ public class TestAuto1 extends LinearOpMode {
             }
             if (currentInstruction == 6) {
                 robot.Intake.setPower(0);
-                robot.InLinear.setTargetPosition(-0);
+                robot.InLinear.setTargetPosition(-50);
                 robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.InLinear.setPower(.5);
-                if (Math.abs(robot.InLinear.getCurrentPosition()) > 20) {
+                if (Math.abs(robot.InLinear.getCurrentPosition() + 50) > 20) {
                     isOkToMoveOn = false;
                 } else {
                     isOkToMoveOn = true;
@@ -207,9 +207,12 @@ public class TestAuto1 extends LinearOpMode {
                     isOkToMoveOn = false;
                 }else {
                     isOkToMoveOn = true;
-                    robot.Lucket.setPosition(.63);  //originally 0
-                    robot.Rucket.setPosition(.71);  //originally 0
+                    robot.Lucket.setPosition(.73);  //originally 0
+                    robot.Rucket.setPosition(.81);  //originally 0
                     robot.Intake.setPower(0);
+                    robot.InLinear.setTargetPosition(-0);
+                    robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.InLinear.setPower(.5);
                 }
                 myStopwatch1.reset();
                 myStopwatch1.startTime();
@@ -217,8 +220,8 @@ public class TestAuto1 extends LinearOpMode {
             if (currentInstruction == 8) {
 
                 if (myStopwatch1.seconds() > 1.7) {
-                    robot.Linear.setTargetPosition(3150);
-                    robot.Rinear.setTargetPosition(3150);
+                    robot.Linear.setTargetPosition(3100);
+                    robot.Rinear.setTargetPosition(3100);
 
                     robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -227,7 +230,7 @@ public class TestAuto1 extends LinearOpMode {
                     robot.Rinear.setPower(.8);
                 }
 
-                if(3150 - robot.Linear.getCurrentPosition() > 20) {
+                if(3100 - robot.Linear.getCurrentPosition() > 20) {
                     isOkToMoveOn = false;
                 } else {
                     isOkToMoveOn = true;
@@ -247,8 +250,8 @@ public class TestAuto1 extends LinearOpMode {
                 robot.Rinear.setPower(.7);
             }
             if (currentInstruction == 11) {
-                robot.Lucket.setPosition(.04);  //originally 1
-                robot.Rucket.setPosition(.13);  //originally 1
+                robot.Lucket.setPosition(.11);  //originally 1
+                robot.Rucket.setPosition(.18);  //originally 1
             }
 
             if (currentInstruction == 12) {

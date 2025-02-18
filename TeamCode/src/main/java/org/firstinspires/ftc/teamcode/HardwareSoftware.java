@@ -30,6 +30,8 @@ public class HardwareSoftware {
     public Servo Lucket     = null;
     public Servo Rucket     = null;
 
+    public Servo MrMini     = null;
+
     public SparkFunOTOS gyro;
 
 
@@ -52,6 +54,8 @@ public class HardwareSoftware {
 
         Lucket = hw.get(Servo.class, "Lucket");
         Rucket = hw.get(Servo.class, "Rucket");
+
+        MrMini = hw.get(Servo.class, "MrMini");
 
         FLdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         BRdrive.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
@@ -127,6 +131,8 @@ public class HardwareSoftware {
 
 
     public SparkFunOTOS gyro(){return gyro;}
+
+    public Servo MrMini(){return MrMini;}
 
 }
 
