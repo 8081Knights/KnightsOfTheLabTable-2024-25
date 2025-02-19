@@ -134,10 +134,15 @@ public class ConnerAuto extends LinearOpMode {
                     robot.Lucket.setPosition(.63);  //originally 0
                     robot.Rucket.setPosition(.71);  //originally 0
                     cTresh = 1.5;
+                    if(caseStopwatch.seconds() < 5) {
+                        isOkToMoveOn = false;
+                    } else {
+                        isOkToMoveOn = true;
+                    }
                     break;
                 }
                 case 1:{
-                    if(caseStopwatch.seconds() > 1){
+                    if(caseStopwatch.seconds() < 1){
                         robot.Linear.setTargetPosition(3300);
                         robot.Rinear.setTargetPosition(3300);
 
@@ -146,6 +151,10 @@ public class ConnerAuto extends LinearOpMode {
 
                         robot.Linear.setPower(1);
                         robot.Rinear.setPower(1);
+                        isOkToMoveOn = false;
+                    }
+                    if (robot.Linear.getCurrentPosition()-3300 < 200) {
+                        isOkToMoveOn = true;
                     }
                 break;
                 }
@@ -167,8 +176,8 @@ public class ConnerAuto extends LinearOpMode {
                 case 4:{
                     cTresh = .5;
                     if(caseStopwatch.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
-                        robot.Lucket.setPosition(.04);  //originally 1
-                        robot.Rucket.setPosition(.11);  //originally 1
+                        robot.Lucket.setPosition(0);  //originally 1
+                        robot.Rucket.setPosition(.07);  //originally 1
                     }
                     break;
                 }

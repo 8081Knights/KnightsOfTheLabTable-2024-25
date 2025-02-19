@@ -208,8 +208,8 @@ public class Drive extends OpMode {
 // For button Y press
 
         if (gamepad2.a) {
-            hw.Lucket.setPosition(0.23);
-            hw.Rucket.setPosition(0.32);
+            hw.Lucket.setPosition(0.16);
+            hw.Rucket.setPosition(0.25);
 
             hw.Linear.setTargetPosition(40);
             hw.Rinear.setTargetPosition(40);
@@ -274,8 +274,8 @@ public class Drive extends OpMode {
             if (!actionPerformedY) {
                 //myStopwatch.seconds() > 0.5 &&
                 // Move the slide motors to their target positions
-                hw.Linear.setTargetPosition(3150);
-                hw.Rinear.setTargetPosition(3150);
+                hw.Linear.setTargetPosition(3075);
+                hw.Rinear.setTargetPosition(3075);
 
                 hw.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hw.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
