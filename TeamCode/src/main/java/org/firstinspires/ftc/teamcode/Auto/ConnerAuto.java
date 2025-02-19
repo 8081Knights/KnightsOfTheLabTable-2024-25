@@ -173,19 +173,14 @@ public class ConnerAuto extends LinearOpMode {
                     break;
                 }
                 case 5:{
-                    if (!pickup1Started) {
-                        pickupWatch1.reset();
-                        pickupWatch1.startTime();
-                        pickup1Started = true;
-                    }
-                    if (pickupWatch1.seconds() > .3){
+                    if (caseStopwatch.seconds() > .3){
                         robot.Intake.setPower(.7);
                         telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " + robot.InLinear.getTargetPosition());
                         robot.InLinear.setTargetPosition(-1650);
                         robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         robot.InLinear.setPower(.5);
                     }
-                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1500) > 30 || pickupWatch1.seconds() < 3) {
+                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1500) > 30 || caseStopwatch.seconds() < 3) {
                         isOkToMoveOn = false;
                     } else {
                         isOkToMoveOn = true;
@@ -207,13 +202,8 @@ public class ConnerAuto extends LinearOpMode {
                     }
                 }
                 case 7: {
-                    if (!dropoff1Started) {
-                        dropoffWatch1.reset();
-                        dropoffWatch1.startTime();
-                        dropoff1Started = true;
-                    }
                     robot.Intake.setPower(-.4);
-                    if(dropoffWatch1.seconds() < .75) {
+                    if(caseStopwatch.seconds() < .75) {
                         isOkToMoveOn = false;
                     }else {
                         isOkToMoveOn = true;
@@ -230,7 +220,7 @@ public class ConnerAuto extends LinearOpMode {
                 }
                 case 8: {
 
-                    if (myStopwatch1.seconds() > 1.7) {
+                    if (caseStopwatch.seconds() > 1.7) {
                         robot.Linear.setTargetPosition(3100);
                         robot.Rinear.setTargetPosition(3100);
 
@@ -267,17 +257,12 @@ public class ConnerAuto extends LinearOpMode {
                     break;
                 }
                 case 12: {
-                    if (!pickup1Started) {
-                        pickupWatch1.reset();
-                        pickupWatch1.startTime();
-                        pickup1Started = true;
-                    }
                     robot.Intake.setPower(.7);
                     telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " +  robot.InLinear.getTargetPosition());
                     robot.InLinear.setTargetPosition(-1300);
                     robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.InLinear.setPower(.5);
-                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1300) > 30 || pickupWatch1.seconds() < 3) {
+                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1300) > 30 || caseStopwatch.seconds() < 3) {
                         isOkToMoveOn = false;
                     } else {
                         isOkToMoveOn = true;
