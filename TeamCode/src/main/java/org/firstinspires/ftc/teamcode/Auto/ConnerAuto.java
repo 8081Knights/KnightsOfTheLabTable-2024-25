@@ -166,7 +166,7 @@ public class ConnerAuto extends LinearOpMode {
                 }
                 case 4:{
                     cTresh = .5;
-                    if(myStopwatch2.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
+                    if(caseStopwatch.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
                         robot.Lucket.setPosition(.04);  //originally 1
                         robot.Rucket.setPosition(.11);  //originally 1
                     }
@@ -214,8 +214,6 @@ public class ConnerAuto extends LinearOpMode {
                         robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         robot.InLinear.setPower(.5);
                     }
-                    myStopwatch1.reset();
-                    myStopwatch1.startTime();
                     break;
                 }
                 case 8: {
