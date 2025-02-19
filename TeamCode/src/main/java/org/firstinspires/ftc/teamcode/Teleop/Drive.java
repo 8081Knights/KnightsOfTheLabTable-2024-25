@@ -167,12 +167,12 @@ public class Drive extends OpMode {
 
 
         if (gamepad2.dpad_down && !(hw.Linear.getCurrentPosition() > 500) && !(hw.Rinear.getCurrentPosition() > 500)) {  //bottom
-            hw.Lucket.setPosition(.11);  //originally 1
-            hw.Rucket.setPosition(.18);  //originally 1
+            hw.Lucket.setPosition(.04);  //originally 1
+            hw.Rucket.setPosition(.11);  //originally 1
 
         } else if (gamepad2.dpad_up) {  //top
-            hw.Lucket.setPosition(.71);
-            hw.Rucket.setPosition(.79);
+            hw.Lucket.setPosition(.64);
+            hw.Rucket.setPosition(.72);
         }
 
         if (gamepad2.x) {

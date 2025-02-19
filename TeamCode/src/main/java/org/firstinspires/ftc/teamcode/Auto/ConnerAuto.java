@@ -35,6 +35,8 @@ public class ConnerAuto extends LinearOpMode {
     boolean pickup1Started = false;
 
     private ElapsedTime dropoffWatch1 = new ElapsedTime();
+    ElapsedTime caseStopwatch = new ElapsedTime();
+    boolean timerGoodToGo = true;
     boolean dropoff1Started = false;
 
     private ElapsedTime servoWatch1 = new ElapsedTime();
@@ -137,53 +139,70 @@ public class ConnerAuto extends LinearOpMode {
                     break;
                 }
                 case 1:{
+                    if(myStopwatch1.seconds() > 1){
+                        robot.Linear.setTargetPosition(3300);
+                        robot.Rinear.setTargetPosition(3300);
 
+                        robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        robot.Linear.setPower(1);
+                        robot.Rinear.setPower(1);
+                    }
+
+                    myStopwatch2.reset();
+                    myStopwatch2.startTime();
+                break;
+                }
+                case 2: {
+                    robot.MrMini.setPosition(0);
+                    cTresh = 3;
+                    if (myStopwatch2.seconds() > 1) {
+                        robot.Linear.setTargetPosition(60);
+                        robot.Rinear.setTargetPosition(60);
+
+                        robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        robot.Linear.setPower(.8);
+                        robot.Rinear.setPower(.8);
+                    }
+                    break;
+                }
+                case 3:{
+                    cTresh = .5;
+                    if(myStopwatch2.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
+                        robot.Lucket.setPosition(.04);  //originally 1
+                        robot.Rucket.setPosition(.11);  //originally 1
+                    }
+                    break;
+                }
+                case 4:{
+                    if (!pickup1Started) {
+                        pickupWatch1.reset();
+                        pickupWatch1.startTime();
+                        pickup1Started = true;
+                    }
+                    if (pickupWatch1.seconds() > .3){
+                        robot.Intake.setPower(.7);
+                        telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " + robot.InLinear.getTargetPosition());
+                        robot.InLinear.setTargetPosition(-1650);
+                        robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.InLinear.setPower(.5);
+                    }
+                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1500) > 30 || pickupWatch1.seconds() < 3) {
+                        isOkToMoveOn = false;
+                    } else {
+                        isOkToMoveOn = true;
+                    }
+                    telemetry.addData("Lucket", robot.Lucket.getPosition());
+                    telemetry.addData("Rucket", robot.Rucket.getPosition());
+                    telemetry.addData("Intake", robot.InLinear.getCurrentPosition());
                 }
             }
 
 
 
-            if (currentInstruction == 1) {
-                if(myStopwatch1.seconds() > 1){
-                    robot.Linear.setTargetPosition(3300);
-                    robot.Rinear.setTargetPosition(3300);
-
-                    robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                    robot.Linear.setPower(1);
-                    robot.Rinear.setPower(1);
-                }
-
-                myStopwatch2.reset();
-                myStopwatch2.startTime();
-            }
-
-            if (currentInstruction == 3) {
-                robot.MrMini.setPosition(0);
-                cTresh = 3;
-                if(myStopwatch2.seconds() > 1){
-                    robot.Linear.setTargetPosition(60);
-                    robot.Rinear.setTargetPosition(60);
-
-                    robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                    robot.Linear.setPower(.8);
-                    robot.Rinear.setPower(.8);
-                }
-
-            }
-
-
-            if (currentInstruction == 4) {
-                cTresh = .5;
-                if(myStopwatch2.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
-                    robot.Lucket.setPosition(.04);  //originally 1
-                    robot.Rucket.setPosition(.11);  //originally 1
-
-                }
-            }
 
 
             if (currentInstruction == 5) {
