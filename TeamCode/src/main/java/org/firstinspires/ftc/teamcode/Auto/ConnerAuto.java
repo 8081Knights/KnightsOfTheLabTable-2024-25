@@ -61,18 +61,37 @@ public class ConnerAuto extends LinearOpMode {
 
         robotPoses.add(new NewPositionOfRobot(5    ,5   ,0));
         robotPoses.add(new NewPositionOfRobot(0   ,11   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot(-15.8,4.2   ,Math.PI * 3 / 4 , .6));
-        robotPoses.add(new NewPositionOfRobot(-7   ,30,Math.PI / 2 , .8));
-        robotPoses.add(new NewPositionOfRobot( 2   ,30,Math.PI / 2 , .7));
-        robotPoses.add(new NewPositionOfRobot( 2   ,30,Math.PI / 2 , .7));
-        robotPoses.add(new NewPositionOfRobot(-5   ,21  ,Math.PI / 2 , .7));
-        robotPoses.add(new NewPositionOfRobot(-7   ,5   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot(-7   ,8   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot(-16.2,4   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot( 2   ,34.0,0 , .5));
-        robotPoses.add(new NewPositionOfRobot(-11  ,34.0,Math.PI / 2 , .7));
-        robotPoses.add(new NewPositionOfRobot(-7  ,34.0,Math.PI / 2 , .6));
-        robotPoses.add(new NewPositionOfRobot(-7  ,34.0,Math.PI / 2 , .6));
+        robotPoses.add(new NewPositionOfRobot(-15.8,4.2  ,Math.PI * 3 / 4 , .6));
+        robotPoses.add(new NewPositionOfRobot(10.5   ,23   ,1.18));
+        robotPoses.add(new NewPositionOfRobot(11   ,24   ,1.18));
+
+        robotPoses.add(new NewPositionOfRobot(11   ,24   ,1.18));
+        robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
+        robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .6));
+        robotPoses.add(new NewPositionOfRobot(0    ,11   ,Math.PI * 3 / 4 , .5));
+        robotPoses.add(new NewPositionOfRobot(-15.8,4.2  ,Math.PI * 3 / 4 , .6));
+
+        robotPoses.add(new NewPositionOfRobot(3    ,32   ,Math.PI / 2     , .6));
+        robotPoses.add(new NewPositionOfRobot(3    ,32   ,Math.PI / 2     , .6));
+        robotPoses.add(new NewPositionOfRobot(3    ,32   ,Math.PI / 2     , .6));
+        robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
+        robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
+
+        robotPoses.add(new NewPositionOfRobot(-15.8,4.2  ,Math.PI * 3 / 4 , .6));
+
+
+
+//        robotPoses.add(new NewPositionOfRobot(-7   ,30,Math.PI / 2 , .8));
+//        robotPoses.add(new NewPositionOfRobot( 2   ,30,Math.PI / 2 , .7));
+//        robotPoses.add(new NewPositionOfRobot( 2   ,30,Math.PI / 2 , .7));
+//        robotPoses.add(new NewPositionOfRobot(-5   ,21  ,Math.PI / 2 , .7));
+//        robotPoses.add(new NewPositionOfRobot(-7   ,5   ,Math.PI * 3 / 4 , .5));
+//        robotPoses.add(new NewPositionOfRobot(-7   ,8   ,Math.PI * 3 / 4 , .5));
+//        robotPoses.add(new NewPositionOfRobot(-16.2,4   ,Math.PI * 3 / 4 , .5));
+//        robotPoses.add(new NewPositionOfRobot( 2   ,34.0,0 , .5));
+//        robotPoses.add(new NewPositionOfRobot(-11  ,34.0,Math.PI / 2 , .7));
+//        robotPoses.add(new NewPositionOfRobot(-7  ,34.0,Math.PI / 2 , .6));
+//        robotPoses.add(new NewPositionOfRobot(-7  ,34.0,Math.PI / 2 , .6));
 
 
 
@@ -130,21 +149,123 @@ public class ConnerAuto extends LinearOpMode {
             switch (currentInstruction){
 
                 case 0:{
-                    robot.MrMini.setPosition(0);
+                    robot.MrMini.setPosition(1);
                     robot.Lucket.setPosition(.63);  //originally 0
                     robot.Rucket.setPosition(.71);  //originally 0
                     cTresh = 1.5;
-                    if(caseStopwatch.seconds() < 5) {
+                    if(caseStopwatch.seconds() < 2) {
+                        isOkToMoveOn = false;
+                    } else {
+                        isOkToMoveOn = true;
+                        robot.MrMini.setPosition(1);
+                    }
+                    break;
+                }
+                case 1:{
+                    if(caseStopwatch.seconds() < .5){
+                        robot.Linear.setTargetPosition(3150);
+                        robot.Rinear.setTargetPosition(3150);
+
+                        robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        robot.Linear.setPower(1);
+                        robot.Rinear.setPower(1);
+                        isOkToMoveOn = false;
+                    } else {
+                        robot.MrMini.setPosition(1);
+                    }
+                    if (robot.Linear.getCurrentPosition()-3300 < 200) {
+                        isOkToMoveOn = true;
+                    }
+                break;
+                }
+                case 3:
+                case 10: {
+                    robot.MrMini.setPosition(0);
+                    cTresh = 3;
+                    if (caseStopwatch.seconds() > .5) {
+                        robot.MrMini.setPosition(1);
+                        robot.Lucket.setPosition(0.16);
+                        robot.Rucket.setPosition(0.25);
+                        robot.Linear.setTargetPosition(60);
+                        robot.Rinear.setTargetPosition(60);
+
+                        robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        robot.Linear.setPower(.8);
+                        robot.Rinear.setPower(.8);
+                        isOkToMoveOn = false;
+                        if (robot.Linear.getCurrentPosition()-60 < 100) {
+                            isOkToMoveOn = true;
+                            robot.MrMini.setPosition(1);
+                        }
+                    }
+                    break;
+                }
+                case 11:
+                case 4: {
+                    robot.MrMini.setPosition(1);
+                    robot.Lucket.setPosition(.04);
+                    robot.Rucket.setPosition(.11);
+
+                    robot.Intake.setPower(.8);
+
+                    robot.InLinear.setTargetPosition(-1600);
+                    robot.InLinear.setPower(.7);
+                    robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    isOkToMoveOn = robot.InLinear.getCurrentPosition() + 1600 < 200;
+                    break;
+                }
+                case 12:
+                case 5: {
+                    if(caseStopwatch.seconds() < 2) {
                         isOkToMoveOn = false;
                     } else {
                         isOkToMoveOn = true;
                     }
                     break;
                 }
-                case 1:{
+                case 13:
+                case 6:{
+                    robot.MrMini.setPosition(0);
+                    robot.InLinear.setTargetPosition(0);
+                    robot.InLinear.setPower(.7);
+                    robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    isOkToMoveOn = robot.InLinear.getCurrentPosition() > -200;
+                    telemetry.addData("SILLY ", robot.InLinear.getCurrentPosition() > -200);
+                    break;
+                }
+                case 14:
+                case 7: {
+                    robot.Lucket.setPosition(.04);
+                    robot.Rucket.setPosition(.11);
+                    robot.Intake.setPower(-.8);
+                    if(caseStopwatch.seconds() < 2) {
+                        isOkToMoveOn = false;
+                        if (caseStopwatch.seconds() > 1) {
+                            robot.MrMini.setPosition(1);
+                            telemetry.addData("SILLY", "RUNNING DOWN|||||");
+                        }
+                    } else {
+                        isOkToMoveOn = true;
+                        robot.Intake.setPower(0);
+                        robot.MrMini.setPosition(1);
+                    }
+                    break;
+                }
+                case 15:
+                case 8: {
+                    robot.MrMini.setPosition(1);
+                    robot.Lucket.setPosition(.63);  //originally 0
+                    robot.Rucket.setPosition(.71);  //originally 0
                     if(caseStopwatch.seconds() < 1){
-                        robot.Linear.setTargetPosition(3300);
-                        robot.Rinear.setTargetPosition(3300);
+                        robot.MrMini.setPosition(1);
+                        robot.Linear.setTargetPosition(3150);
+                        robot.Rinear.setTargetPosition(3150);
 
                         robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -155,144 +276,16 @@ public class ConnerAuto extends LinearOpMode {
                     }
                     if (robot.Linear.getCurrentPosition()-3300 < 200) {
                         isOkToMoveOn = true;
+                        robot.MrMini.setPosition(.1);
                     }
-                break;
+                    break;
                 }
-                case 3: {
-                    robot.MrMini.setPosition(0);
-                    cTresh = 3;
-                    if (caseStopwatch.seconds() > 1) {
-                        robot.Linear.setTargetPosition(60);
-                        robot.Rinear.setTargetPosition(60);
 
-                        robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                        robot.Linear.setPower(.8);
-                        robot.Rinear.setPower(.8);
-                    }
-                    break;
-                }
-                case 4:{
-                    cTresh = .5;
-                    if(caseStopwatch.seconds() > 1 && robot.Linear.getCurrentPosition() < 40 && robot.Rinear.getCurrentPosition() < 40){
-                        robot.Lucket.setPosition(0);  //originally 1
-                        robot.Rucket.setPosition(.07);  //originally 1
-                    }
-                    break;
-                }
-                case 5:{
-                    if (caseStopwatch.seconds() > .3){
-                        robot.Intake.setPower(.7);
-                        telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " + robot.InLinear.getTargetPosition());
-                        robot.InLinear.setTargetPosition(-1650);
-                        robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.InLinear.setPower(.5);
-                    }
-                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1500) > 30 || caseStopwatch.seconds() < 3) {
-                        isOkToMoveOn = false;
-                    } else {
-                        isOkToMoveOn = true;
-                    }
-                    telemetry.addData("Lucket", robot.Lucket.getPosition());
-                    telemetry.addData("Rucket", robot.Rucket.getPosition());
-                    telemetry.addData("Intake", robot.InLinear.getCurrentPosition());
-                    break;
-                }
-                case 6: {
-                    robot.Intake.setPower(0);
-                    robot.InLinear.setTargetPosition(50);
-                    robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.InLinear.setPower(.5);
-                    if (Math.abs(robot.InLinear.getCurrentPosition() + 50) > 20) {
-                        isOkToMoveOn = false;
-                    } else {
-                        isOkToMoveOn = true;
-                    }
-                }
-                case 7: {
-                    robot.Intake.setPower(-.4);
-                    if(caseStopwatch.seconds() < .75) {
-                        isOkToMoveOn = false;
-                    }else {
-                        isOkToMoveOn = true;
-                        robot.Lucket.setPosition(.73);  //originally 0
-                        robot.Rucket.setPosition(.81);  //originally 0
-                        robot.Intake.setPower(0);
-                        robot.InLinear.setTargetPosition(-0);
-                        robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.InLinear.setPower(.5);
-                    }
-                    break;
-                }
-                case 8: {
-
-                    if (caseStopwatch.seconds() > 1.7) {
-                        robot.Linear.setTargetPosition(3100);
-                        robot.Rinear.setTargetPosition(3100);
-
-                        robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                        robot.Linear.setPower(.8);
-                        robot.Rinear.setPower(.8);
-                    }
-
-                    if(3100 - robot.Linear.getCurrentPosition() > 20) {
-                        isOkToMoveOn = false;
-                    } else {
-                        isOkToMoveOn = true;
-                        dropoff1Started = false;
-                        pickup1Started = false;
-                    }
-                    break;
-                }
-                case 10: {
-                    robot.Linear.setTargetPosition(60);
-                    robot.Rinear.setTargetPosition(60);
-
-                    robot.Linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.Rinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                    robot.Linear.setPower(.7);
-                    robot.Rinear.setPower(.7);
-                    break;
-                }
-                case 11: {
-                    robot.Lucket.setPosition(.11);  //originally 1
-                    robot.Rucket.setPosition(.18);  //originally 1
-                    break;
-                }
-                case 12: {
-                    robot.Intake.setPower(.7);
-                    telemetry.addData("running 5", robot.InLinear.getCurrentPosition() + ", " +  robot.InLinear.getTargetPosition());
-                    robot.InLinear.setTargetPosition(-1300);
-                    robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.InLinear.setPower(.5);
-                    if (Math.abs(robot.InLinear.getCurrentPosition() + 1300) > 30 || caseStopwatch.seconds() < 3) {
-                        isOkToMoveOn = false;
-                    } else {
-                        isOkToMoveOn = true;
-                    }
-                    break;
-                }
-                case 13: {
-                    robot.Intake.setPower(0);
-                    robot.InLinear.setTargetPosition(-0);
-                    robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.InLinear.setPower(.5);
-                    if (Math.abs(robot.InLinear.getCurrentPosition()) > 20) {
-                        isOkToMoveOn = false;
-                    } else {
-                        isOkToMoveOn = true;
-                    }
-                    break;
-                }
             }
 
 
 
-            if ((Math.abs(cerror) < cTresh) && (currentInstruction != 13) && isOkToMoveOn) {
+            if ((Math.abs(cerror) < cTresh) && (currentInstruction != 20) && isOkToMoveOn) {
                 caseStopwatch.reset();
                 caseStopwatch.startTime();
                 currentInstruction++;
