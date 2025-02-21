@@ -56,7 +56,7 @@ public class Drive extends OpMode {
     boolean wasBumperPressed = false;  // Track previous bumper state
 
     private static ElapsedTime myStopwatch = new ElapsedTime();
-
+    private ElapsedTime sigmaboy = new ElapsedTime();
     boolean isAButtonPressed = false;
     boolean isBButtonPressed = false;
     boolean isYButtonPressed = false;
