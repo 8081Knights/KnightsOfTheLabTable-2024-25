@@ -61,7 +61,7 @@ public class ConnerAuto extends LinearOpMode {
 
         robotPoses.add(new NewPositionOfRobot(3    ,3   ,0));
         robotPoses.add(new NewPositionOfRobot(0   ,13   ,Math.PI * 3 / 4 , .7));
-        robotPoses.add(new NewPositionOfRobot(-16,4.5  ,Math.PI * 3 / 4 , .6));
+        robotPoses.add(new NewPositionOfRobot(-16,4.5  ,Math.PI * 3 / 4 , .7));
         robotPoses.add(new NewPositionOfRobot(8   ,23   ,1.19, .6));
         robotPoses.add(new NewPositionOfRobot(8   ,23   ,1.18));
 
@@ -69,7 +69,7 @@ public class ConnerAuto extends LinearOpMode {
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .6));
         robotPoses.add(new NewPositionOfRobot(-5    ,7   ,Math.PI * 3 / 4 , .7));
-        robotPoses.add(new NewPositionOfRobot(-14,-0  ,Math.PI * 3 / 4 , .6));
+        robotPoses.add(new NewPositionOfRobot(-14,-0  ,Math.PI * 3 / 4 , .7));
 
         robotPoses.add(new NewPositionOfRobot(2.5    ,29.5   ,Math.PI / 2     , .6));
         robotPoses.add(new NewPositionOfRobot(2.5    ,29.5   ,Math.PI / 2     , .6));
@@ -78,7 +78,7 @@ public class ConnerAuto extends LinearOpMode {
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
 
         robotPoses.add(new NewPositionOfRobot(-5    ,7   ,Math.PI * 3 / 4 , .7));
-        robotPoses.add(new NewPositionOfRobot(-15,3  ,Math.PI * 3 / 4 , .6));
+        robotPoses.add(new NewPositionOfRobot(-15,3  ,Math.PI * 3 / 4 , .7));
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
 
 
@@ -176,7 +176,7 @@ public class ConnerAuto extends LinearOpMode {
                         robot.Rinear.setPower(1);
                         isOkToMoveOn = false;
                     }
-                    if (3150 - robot.Rinear.getCurrentPosition() < 200) {
+                    if (3150 - robot.Rinear.getCurrentPosition() < 400) {
                         isOkToMoveOn = true;
                         robot.MrMini.setPosition(0);
                     }
@@ -213,7 +213,7 @@ public class ConnerAuto extends LinearOpMode {
 
 
                     robot.Intake.setPower(.8);
-                    if (caseStopwatch.seconds() > 1) {
+                    if (caseStopwatch.seconds() > 1.2) {
                         robot.Lucket.setPosition(.04);
                         robot.Rucket.setPosition(.11);
                     }
@@ -294,7 +294,7 @@ public class ConnerAuto extends LinearOpMode {
                         robot.Rinear.setPower(1);
                         isOkToMoveOn = false;
                     }
-                    if (robot.Linear.getCurrentPosition()-3300 < 200) {
+                    if (robot.Linear.getCurrentPosition()-3300 < 400) {
                         isOkToMoveOn = true;
                     }
                     break;
@@ -304,7 +304,7 @@ public class ConnerAuto extends LinearOpMode {
 
 
 
-            if ((Math.abs(cerror) < cTresh) && (currentInstruction != 20) && isOkToMoveOn) {
+            if ((Math.abs(cerror) < cTresh) && (currentInstruction != 17) && isOkToMoveOn) {
                 caseStopwatch.reset();
                 caseStopwatch.startTime();
                 currentInstruction++;
