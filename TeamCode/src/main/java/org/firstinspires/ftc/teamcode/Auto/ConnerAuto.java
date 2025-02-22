@@ -59,21 +59,21 @@ public class ConnerAuto extends LinearOpMode {
         robot.InLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
-        robotPoses.add(new NewPositionOfRobot(5    ,5   ,0));
-        robotPoses.add(new NewPositionOfRobot(0   ,11   ,Math.PI * 3 / 4 , .5));
-        robotPoses.add(new NewPositionOfRobot(-16,3  ,Math.PI * 3 / 4 , .6));
-        robotPoses.add(new NewPositionOfRobot(10   ,21   ,1.19));
-        robotPoses.add(new NewPositionOfRobot(10   ,21   ,1.18));
+        robotPoses.add(new NewPositionOfRobot(3    ,3   ,0));
+        robotPoses.add(new NewPositionOfRobot(0   ,13   ,Math.PI * 3 / 4 , .7));
+        robotPoses.add(new NewPositionOfRobot(-16,4.5  ,Math.PI * 3 / 4 , .6));
+        robotPoses.add(new NewPositionOfRobot(8   ,23   ,1.19, .6));
+        robotPoses.add(new NewPositionOfRobot(8   ,23   ,1.18));
 
-        robotPoses.add(new NewPositionOfRobot(10   ,21   ,1.19));
+        robotPoses.add(new NewPositionOfRobot(8   ,23   ,1.19));
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .6));
         robotPoses.add(new NewPositionOfRobot(-5    ,7   ,Math.PI * 3 / 4 , .7));
         robotPoses.add(new NewPositionOfRobot(-14,-0  ,Math.PI * 3 / 4 , .6));
 
-        robotPoses.add(new NewPositionOfRobot(5    ,29   ,Math.PI / 2     , .6));
-        robotPoses.add(new NewPositionOfRobot(5    ,29   ,Math.PI / 2     , .6));
-        robotPoses.add(new NewPositionOfRobot(5    ,29   ,Math.PI / 2     , .6));
+        robotPoses.add(new NewPositionOfRobot(2    ,29.5   ,Math.PI / 2     , .6));
+        robotPoses.add(new NewPositionOfRobot(2    ,29.5   ,Math.PI / 2     , .6));
+        robotPoses.add(new NewPositionOfRobot(2    ,29.5   ,Math.PI / 2     , .6));
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
         robotPoses.add(new NewPositionOfRobot(0    ,20   ,0, .7));
 
@@ -165,7 +165,7 @@ public class ConnerAuto extends LinearOpMode {
                     break;
                 }
                 case 1:{
-                    if(caseStopwatch.seconds() < .5){
+                    if(caseStopwatch.seconds() < .4){
                         robot.Linear.setTargetPosition(3150);
                         robot.Rinear.setTargetPosition(3150);
 
@@ -188,10 +188,10 @@ public class ConnerAuto extends LinearOpMode {
                 case 10: {
                     robot.MrMini.setPosition(0);
                     cTresh = 3;
-                    if (caseStopwatch.seconds() > .5) {
+                    if (caseStopwatch.seconds() > .7) {
                         robot.MrMini.setPosition(1);
-                        robot.Lucket.setPosition(0.16);
-                        robot.Rucket.setPosition(0.25);
+                        robot.Lucket.setPosition(0.17);
+                        robot.Rucket.setPosition(0.26);
                         robot.Linear.setTargetPosition(60);
                         robot.Rinear.setTargetPosition(60);
 
@@ -220,11 +220,11 @@ public class ConnerAuto extends LinearOpMode {
                     }
 
                     if(caseStopwatch.seconds() > 2) {
-                        robot.InLinear.setTargetPosition(-1600);
+                        robot.InLinear.setTargetPosition(-1500);
                         robot.InLinear.setPower(.8);
                         robot.InLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     }
-                    isOkToMoveOn = robot.InLinear.getCurrentPosition() + 1600 < 200;
+                    isOkToMoveOn = robot.InLinear.getCurrentPosition() + 1500 < 200;
                     break;
                 }
                 case 12:
